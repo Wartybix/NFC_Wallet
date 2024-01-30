@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.NFC"/>
+    <!--Allows access to NFC firmware-->
+
     <uses-feature android:name="android.hardware.nfc" android:required="true"/>
+    <!--Only available to devices where NFC is present-->
 
     <application
         android:allowBackup="true"
