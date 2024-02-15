@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NFC Wallet</string>
+    <string name="new_tag">New Tag</string>
 </resources>
