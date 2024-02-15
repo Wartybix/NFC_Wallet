@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,7 +17,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Badge
+import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -28,9 +32,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,12 +50,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NFCWalletTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Menu()
-                }
+                Menu()
             }
         }
     }
@@ -73,7 +76,7 @@ fun Menu() {
 @Composable
 fun TagList(modifier: Modifier) {
     LazyColumn(
-        contentPadding = PaddingValues(all = 16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
     ) {
@@ -93,8 +96,9 @@ fun TagCard(
     icon: ImageBitmap?,
     modifier: Modifier
 ) {
-    Card (
+    Surface (
         shape = MaterialTheme.shapes.extraLarge,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         modifier = modifier.fillMaxWidth()
     ) {
         Row(
@@ -105,7 +109,16 @@ fun TagCard(
             val iconModifier = Modifier
                 .size(64.dp)
                 .clip(CircleShape)
-            if (icon != null) {
+            if (icon == null) {
+                Image(
+                    imageVector = Icons.Outlined.Badge,
+                    contentDescription = null,
+                    modifier = iconModifier
+                        .background(color = MaterialTheme.colorScheme.primary)
+                        .padding(12.dp),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
+                )
+            } else {
                 Image(
                     bitmap = icon,
                     contentDescription = null,
@@ -125,7 +138,12 @@ fun TagCard(
 private val tagTestData = listOf(
     R.drawable.pigeon to "Pigeon Card",
     null to "Passport",
-    null to "Shopping Card"
+    null to "Shopping Card",
+    null to "Other Card",
+    null to "Cardigan Card",
+    null to "Student Card",
+    null to "Staff Card",
+    null to "Cardboard card"
 ).map { DrawableStringPair(it.first, it.second) }
 
 private data class DrawableStringPair(
