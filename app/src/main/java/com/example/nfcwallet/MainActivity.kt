@@ -1,5 +1,6 @@
 package com.example.nfcwallet
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,12 +23,14 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,18 +51,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            NFCWalletTheme {
-                // A surface container using the 'background' color from the theme
-                Menu()
-            }
+            // A surface container using the 'background' color from the theme
+            Menu()
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Menu() {
     NFCWalletTheme {
         Scaffold(
+            topBar = {
+                TopAppBar(title = { Text(stringResource(R.string.app_name)) })
+            },
             floatingActionButton = {
                 ExtendedFloatingActionButton(
                     onClick = { /*TODO*/ },
@@ -68,15 +73,23 @@ fun Menu() {
                 )
             }
         ) { padding ->
-            TagList(Modifier)
+            TagList(Modifier, padding)
         }
     }
 }
 
 @Composable
-fun TagList(modifier: Modifier) {
+fun TagList(modifier: Modifier, paddingValues: PaddingValues) {
+    val verticalPadding = 16.dp
+    val horizontalPadding = 24.dp
+
     LazyColumn(
-        contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
+        contentPadding = PaddingValues(
+            top = verticalPadding + paddingValues.calculateTopPadding(),
+            bottom = verticalPadding + paddingValues.calculateBottomPadding(),
+            start = horizontalPadding,
+            end = horizontalPadding
+        ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
     ) {
@@ -162,6 +175,14 @@ fun TagCardPreview() {
 @Preview(showBackground = true)
 @Composable
 fun AppPreview() {
+    NFCWalletTheme {
+        Menu()
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun AppPreviewNight() {
     NFCWalletTheme {
         Menu()
     }
