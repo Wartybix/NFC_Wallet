@@ -112,6 +112,7 @@ fun TagCard(
     Surface (
         shape = MaterialTheme.shapes.extraLarge,
         color = MaterialTheme.colorScheme.surfaceVariant,
+        onClick = { /*TODO*/ },
         modifier = modifier.fillMaxWidth()
     ) {
         Row(
