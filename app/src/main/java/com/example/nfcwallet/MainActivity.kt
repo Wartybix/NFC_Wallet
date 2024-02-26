@@ -8,8 +8,10 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -67,6 +69,32 @@ fun Menu() {
             }
         ) { padding ->
             TagList(Modifier, padding)
+        }
+    }
+}
+
+@Composable
+fun BadgeIcon(modifier: Modifier = Modifier) {
+    Image(
+        imageVector = Icons.Outlined.Badge,
+        contentDescription = null,
+        modifier = modifier
+            .background(color = MaterialTheme.colorScheme.primary)
+            .padding(12.dp),
+        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
+    )
+}
+
+@Composable
+fun ProjectionScreen(modifier: Modifier = Modifier) {
+    NFCWalletTheme {
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(painter = R.drawable.pigeon, contentDescription = )
+            Text("Place the back of the phone to the reader.")
         }
     }
 }
@@ -163,6 +191,14 @@ private data class DrawableStringPair(
 fun TagCardPreview() {
     NFCWalletTheme {
         TagCard("Pigeon Card", ImageBitmap.imageResource(R.drawable.pigeon), Modifier)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProjectionPreview() {
+    NFCWalletTheme {
+        ProjectionScreen()
     }
 }
 
