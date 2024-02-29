@@ -9,6 +9,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -23,8 +24,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.OpenInFull
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Badge
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -126,13 +129,31 @@ fun ProjectionScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.size(width = 256.dp, 160.dp),
                     border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline)
                 ) {
-                    BadgeIcon(modifier = Modifier.padding(16.dp)
-                    )
-                    //Image(
-                    //    painter = painterResource(id = R.drawable.pigeon),
-                    //    contentDescription = null,
-                    //    contentScale = ContentScale.Crop,
-                    //)
+                    BadgeIcon(modifier = Modifier.padding(16.dp))
+                    Box(contentAlignment = Alignment.TopEnd) {
+                        Image(
+                            painter = painterResource(id = R.drawable.pigeon),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                        )
+                        Surface(
+                            color = MaterialTheme.colorScheme.inverseSurface,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .clip(CircleShape)
+                        ) {
+                            IconButton(
+                                onClick = { /*TODO*/ },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.OpenInFull,
+                                    contentDescription = "Expand image",
+                                    tint = MaterialTheme.colorScheme.inverseOnSurface,
+                                )
+                            }
+                        }
+                    }
+
                 }
                 Text(
                     text = "Card Name",
