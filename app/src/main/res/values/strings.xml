@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">NFC Wallet</string>
     <string name="new_tag">New Tag</string>
+    <string name="expand_image">Expand image</string>
+    <string name="place_the_back_of_your_phone_to_the_reader_when_ready">Place the back of your phone to the reader when ready.</string>
 </resources>
