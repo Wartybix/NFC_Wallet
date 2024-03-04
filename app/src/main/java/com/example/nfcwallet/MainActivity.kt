@@ -75,7 +75,7 @@ fun Menu() {
                 )
             }
         ) { padding ->
-            TagList(Modifier, padding)
+            TagList(padding)
         }
     }
 }
@@ -168,7 +168,7 @@ fun ProjectionScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TagList(modifier: Modifier, paddingValues: PaddingValues) {
+fun TagList(paddingValues: PaddingValues, modifier: Modifier = Modifier) {
     val verticalPadding = 16.dp
     val horizontalPadding = 24.dp
 
@@ -196,7 +196,7 @@ fun TagList(modifier: Modifier, paddingValues: PaddingValues) {
 fun TagCard(
     name: String,
     icon: ImageBitmap?,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Surface (
         shape = MaterialTheme.shapes.extraLarge,
@@ -257,7 +257,7 @@ private data class DrawableStringPair(
 @Composable
 fun TagCardPreview() {
     NFCWalletTheme {
-        TagCard("Pigeon Card", ImageBitmap.imageResource(R.drawable.pigeon), Modifier)
+        TagCard("Pigeon Card", ImageBitmap.imageResource(R.drawable.pigeon))
     }
 }
 
