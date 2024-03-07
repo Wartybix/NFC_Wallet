@@ -1,7 +1,6 @@
 package com.example.nfcwallet.ui
 
 import android.content.res.Configuration
-import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
