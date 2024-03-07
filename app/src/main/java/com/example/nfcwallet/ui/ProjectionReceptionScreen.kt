@@ -3,14 +3,12 @@ package com.example.nfcwallet.ui
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -18,6 +16,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.OpenInFull
+import androidx.compose.material.icons.outlined.CreditCard
+import androidx.compose.material.icons.outlined.Smartphone
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,8 +38,50 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nfcwallet.R
-import com.example.nfcwallet.components.BadgeIcon
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
+
+@Composable
+fun ReceptionTutorialImage(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.size(196.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(196.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 48.dp, vertical = 16.dp)
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .fillMaxSize()
+            )
+            Icon(
+                imageVector = Icons.Outlined.Smartphone,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .size(128.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(vertical = 24.dp, horizontal = 16.dp)
+                    .background(MaterialTheme.colorScheme.tertiaryContainer)
+                    .fillMaxSize()
+            )
+            Icon(
+                imageVector = Icons.Outlined.CreditCard,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,6 +162,14 @@ fun ProjectionScreen(
                 textAlign = TextAlign.Center
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ReceptionTutorialIconPreview() {
+    NFCWalletTheme {
+        ReceptionTutorialImage()
     }
 }
 
