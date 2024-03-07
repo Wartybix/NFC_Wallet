@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -104,46 +105,51 @@ fun CommunicationScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Surface(
-                shape = MaterialTheme.shapes.extraLarge,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .aspectRatio(1.6f),
-                border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline)
-            ) {
-                Box(contentAlignment = Alignment.TopEnd) {
-                    Image(
-                        painter = painterResource(id = R.drawable.pigeon),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                    Surface(
-                        color = MaterialTheme.colorScheme.inverseSurface,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .clip(CircleShape)
-                    ) {
-                        IconButton(
-                            onClick = { /*TODO*/ },
+            if (projectionMode) {
+                Surface(
+                    shape = MaterialTheme.shapes.extraLarge,
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .aspectRatio(1.6f),
+                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline)
+                ) {
+                    Box(contentAlignment = Alignment.TopEnd) {
+                        Image(
+                            painter = painterResource(id = R.drawable.pigeon),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                        Surface(
+                            color = MaterialTheme.colorScheme.inverseSurface,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .clip(CircleShape)
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.OpenInFull,
-                                contentDescription = stringResource(R.string.expand_image),
-                                tint = MaterialTheme.colorScheme.inverseOnSurface,
-                            )
+                            IconButton(
+                                onClick = { /*TODO*/ },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.OpenInFull,
+                                    contentDescription = stringResource(R.string.expand_image),
+                                    tint = MaterialTheme.colorScheme.inverseOnSurface,
+                                )
+                            }
                         }
                     }
-                }
 
+                }
+                Text(
+                    text = "Pigeon Card",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
+                )
+            } else {
+                ReceptionTutorialImage(modifier = Modifier.padding(bottom = 16.dp))
             }
-            Text(
-                text = "Pigeon Card",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
-            )
+
             Text(
                 text = stringResource(
                     R.string.place_the_back_of_your_phone_to_the_reader_when_ready),
@@ -176,5 +182,21 @@ fun ProjectionPreview() {
 fun ProjectionPreviewNight() {
     NFCWalletTheme {
         CommunicationScreen(true)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ReceptionPreview() {
+    NFCWalletTheme {
+        CommunicationScreen(false)
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ReceptionPreviewNight() {
+    NFCWalletTheme {
+        CommunicationScreen(false)
     }
 }
