@@ -3,6 +3,7 @@ package com.example.nfcwallet.ui
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,77 +42,74 @@ import com.example.nfcwallet.ui.theme.NFCWalletTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProjectionScreen(modifier: Modifier = Modifier) {
-    NFCWalletTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {},
-                    navigationIcon = {
-                        IconButton(onClick = {}) {
-                            Icon(imageVector = Icons.Outlined.ArrowBack, "Back")
-                        }
-                    },
-                    actions = {
-                        IconButton(onClick = {}) {
-                            Icon(imageVector = Icons.Default.MoreVert, "More")
-                        }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(onClick = {}) {
+                        Icon(imageVector = Icons.Outlined.ArrowBack, "Back")
                     }
-                )
-            }
-        ) { padding ->
-            Column(
-                modifier = modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Surface(
-                    shape = MaterialTheme.shapes.extraLarge,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier.size(width = 256.dp, 160.dp),
-                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline)
-                ) {
-                    BadgeIcon(modifier = Modifier.padding(16.dp))
-                    Box(contentAlignment = Alignment.TopEnd) {
-                        Image(
-                            painter = painterResource(id = R.drawable.pigeon),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                        )
-                        Surface(
-                            color = MaterialTheme.colorScheme.inverseSurface,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .clip(CircleShape)
-                        ) {
-                            IconButton(
-                                onClick = { /*TODO*/ },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.OpenInFull,
-                                    contentDescription = stringResource(R.string.expand_image),
-                                    tint = MaterialTheme.colorScheme.inverseOnSurface,
-                                )
-                            }
-                        }
+                },
+                actions = {
+                    IconButton(onClick = {}) {
+                        Icon(imageVector = Icons.Default.MoreVert, "More")
                     }
-
                 }
-                Text(
-                    text = "Card Name",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
-                )
-                Text(
-                    text = stringResource(
-                        R.string.place_the_back_of_your_phone_to_the_reader_when_ready),
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(horizontal = 64.dp),
-                    textAlign = TextAlign.Center
-                )
-            }
+            )
         }
+    ) { padding ->
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Surface(
+                shape = MaterialTheme.shapes.extraLarge,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.size(width = 256.dp, 160.dp),
+                border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline)
+            ) {
+                BadgeIcon(modifier = Modifier.padding(16.dp))
+                Box(contentAlignment = Alignment.TopEnd) {
+                    Image(
+                        painter = painterResource(id = R.drawable.pigeon),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                    )
+                    Surface(
+                        color = MaterialTheme.colorScheme.inverseSurface,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clip(CircleShape)
+                    ) {
+                        IconButton(
+                            onClick = { /*TODO*/ },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.OpenInFull,
+                                contentDescription = stringResource(R.string.expand_image),
+                                tint = MaterialTheme.colorScheme.inverseOnSurface,
+                            )
+                        }
+                    }
+                }
 
+            }
+            Text(
+                text = "Card Name",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
+            )
+            Text(
+                text = stringResource(
+                    R.string.place_the_back_of_your_phone_to_the_reader_when_ready),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(horizontal = 64.dp),
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 

@@ -6,10 +6,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,21 +49,46 @@ fun Menu(
     navController: NavHostController = rememberNavController()
 ) {
     NFCWalletTheme {
-        Column {
-            NavHost(
-                navController = navController,
-                startDestination = WalletScreen.Home.name,
-            ) {
-                composable(route = WalletScreen.Home.name) {
-                    HomeScreen(
-                        listData = tagTestData,
-                        onTagClicked = {
-                            navController.navigate(WalletScreen.ProjectionReception.name)
+        Surface {
+            Column {
+                NavHost(
+                    navController = navController,
+                    startDestination = WalletScreen.Home.name,
+                ) {
+                    val slideAnimationLengthMillis = 400
+                    val fadeLengthMillis = 300
+
+                    composable(
+                        route = WalletScreen.Home.name,
+                        enterTransition = {
+                            slideInHorizontally( initialOffsetX = { -it / 2 } ) + fadeIn()
+                        },
+                        exitTransition = {
+                            slideOutHorizontally(targetOffsetX = { -it / 2 }) + fadeOut()
                         }
-                    )
-                }
-                composable(route = WalletScreen.ProjectionReception.name) {
-                    ProjectionScreen()
+                    ) {
+                        HomeScreen(
+                            listData = tagTestData,
+                            onTagClicked = {
+                                navController.navigate(WalletScreen.ProjectionReception.name)
+                            }
+                        )
+                    }
+                    composable(
+                        route = WalletScreen.ProjectionReception.name,
+                        enterTransition = {
+                            slideInHorizontally(
+                                initialOffsetX = { it / 2 }
+                            ) + fadeIn()
+                        },
+                        exitTransition = {
+                            slideOutHorizontally(
+                                targetOffsetX = { it / 2 }
+                            ) + fadeOut()
+                        }
+                    ) {
+                        ProjectionScreen()
+                    }
                 }
             }
         }
