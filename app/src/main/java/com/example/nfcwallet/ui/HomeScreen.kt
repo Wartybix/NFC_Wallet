@@ -22,10 +22,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.UiMode
 import androidx.compose.ui.unit.dp
 import com.example.nfcwallet.DrawableStringPair
-import com.example.nfcwallet.MainActivity
 import com.example.nfcwallet.R
 import com.example.nfcwallet.components.BadgeIcon
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
