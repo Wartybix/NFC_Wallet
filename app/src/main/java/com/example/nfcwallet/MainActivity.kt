@@ -49,6 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nfcwallet.components.BadgeIcon
+import com.example.nfcwallet.ui.TagList
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 class MainActivity : ComponentActivity() {
@@ -77,154 +78,7 @@ fun Menu() {
                 )
             }
         ) { padding ->
-            TagList(padding)
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ProjectionScreen(modifier: Modifier = Modifier) {
-    NFCWalletTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {},
-                    navigationIcon = {
-                        IconButton(onClick = {}) {
-                            Icon(imageVector = Icons.Outlined.ArrowBack, "Back")
-                        }
-                    },
-                    actions = {
-                        IconButton(onClick = {}) {
-                            Icon(imageVector = Icons.Default.MoreVert, "More")
-                        }
-                    }
-                )
-            }
-        ) { padding ->
-            Column(
-                modifier = modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Surface(
-                    shape = MaterialTheme.shapes.extraLarge,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier.size(width = 256.dp, 160.dp),
-                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline)
-                ) {
-                    BadgeIcon(modifier = Modifier.padding(16.dp))
-                    Box(contentAlignment = Alignment.TopEnd) {
-                        Image(
-                            painter = painterResource(id = R.drawable.pigeon),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                        )
-                        Surface(
-                            color = MaterialTheme.colorScheme.inverseSurface,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .clip(CircleShape)
-                        ) {
-                            IconButton(
-                                onClick = { /*TODO*/ },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.OpenInFull,
-                                    contentDescription = stringResource(R.string.expand_image),
-                                    tint = MaterialTheme.colorScheme.inverseOnSurface,
-                                )
-                            }
-                        }
-                    }
-
-                }
-                Text(
-                    text = "Card Name",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
-                )
-                Text(
-                    text = stringResource(
-                        R.string.place_the_back_of_your_phone_to_the_reader_when_ready),
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(horizontal = 64.dp),
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
-
-    }
-}
-
-@Composable
-fun TagList(paddingValues: PaddingValues, modifier: Modifier = Modifier) {
-    val verticalPadding = 16.dp
-    val horizontalPadding = 24.dp
-
-    LazyColumn(
-        contentPadding = PaddingValues(
-            top = verticalPadding + paddingValues.calculateTopPadding(),
-            bottom = verticalPadding + paddingValues.calculateBottomPadding(),
-            start = horizontalPadding,
-            end = horizontalPadding
-        ),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
-    ) {
-        items(tagTestData) { item ->
-            if (item.icon == null) {
-                TagCard(item.name, null, Modifier)
-            } else {
-                TagCard(item.name, ImageBitmap.imageResource(item.icon), Modifier)
-            }
-        }
-    }
-}
-
-@Composable
-fun TagCard(
-    name: String,
-    icon: ImageBitmap?,
-    modifier: Modifier = Modifier
-) {
-    Surface (
-        shape = MaterialTheme.shapes.extraLarge,
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        onClick = { /*TODO*/ },
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.padding(24.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val iconContentScale = ContentScale.Crop
-            val iconModifier = Modifier
-                .size(64.dp)
-                .clip(CircleShape)
-            if (icon == null) {
-                Surface(
-                    modifier = iconModifier,
-                    color = MaterialTheme.colorScheme.primary
-                ) {
-                    BadgeIcon()
-                }
-
-            } else {
-                Image(
-                    bitmap = icon,
-                    contentDescription = null,
-                    contentScale = iconContentScale,
-                    modifier = iconModifier
-                )
-            }
-            Text(
-                text = name,
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(start = 16.dp)
-            )
+            TagList(tagTestData, padding)
         }
     }
 }
@@ -240,34 +94,10 @@ private val tagTestData = listOf(
     null to "Cardboard card"
 ).map { DrawableStringPair(it.first, it.second) }
 
-private data class DrawableStringPair(
+data class DrawableStringPair(
     @DrawableRes val icon: Int?,
     val name: String
 )
-
-@Preview
-@Composable
-fun TagCardPreview() {
-    NFCWalletTheme {
-        TagCard("Pigeon Card", ImageBitmap.imageResource(R.drawable.pigeon))
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ProjectionPreview() {
-    NFCWalletTheme {
-        ProjectionScreen()
-    }
-}
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun ProjectionPreviewNight() {
-    NFCWalletTheme {
-        ProjectionScreen()
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
