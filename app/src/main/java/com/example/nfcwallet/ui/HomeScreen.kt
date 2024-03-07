@@ -1,6 +1,7 @@
 package com.example.nfcwallet.ui
 
 import android.content.res.Configuration
+import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -68,11 +69,12 @@ fun HomeScreen(
             modifier = modifier
         ) {
             items(listData) { item ->
-                if (item.icon == null) {
-                    TagCard(item.name, null, Modifier, onTagClicked)
+                val icon: ImageBitmap? = if (item.icon == null) {
+                    null
                 } else {
-                    TagCard(item.name, ImageBitmap.imageResource(item.icon), Modifier, onTagClicked)
+                    ImageBitmap.imageResource(item.icon)
                 }
+                TagCard(name = item.name, icon = icon, Modifier, onTagClicked)
             }
         }
     }
