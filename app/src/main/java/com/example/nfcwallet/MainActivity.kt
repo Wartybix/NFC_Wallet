@@ -87,7 +87,7 @@ fun Menu(
                             ) + fadeOut()
                         }
                     ) {
-                        ProjectionScreen()
+                        ProjectionScreen(onNavigateUp = { navController.navigateUp() })
                     }
                 }
             }

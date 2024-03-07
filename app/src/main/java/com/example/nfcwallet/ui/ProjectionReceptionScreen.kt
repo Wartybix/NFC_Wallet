@@ -42,13 +42,16 @@ import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProjectionScreen(modifier: Modifier = Modifier) {
+fun ProjectionScreen(
+    modifier: Modifier = Modifier,
+    onNavigateUp: () -> Unit = {}
+) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = onNavigateUp) {
                         Icon(imageVector = Icons.Default.ArrowBack, "Back")
                     }
                 },
