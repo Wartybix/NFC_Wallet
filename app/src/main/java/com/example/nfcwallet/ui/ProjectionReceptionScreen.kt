@@ -47,22 +47,11 @@ fun ReceptionTutorialImage(
     Box(
         modifier = modifier.size(196.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(196.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = 48.dp, vertical = 16.dp)
-                    .background(MaterialTheme.colorScheme.secondaryContainer)
-                    .fillMaxSize()
-            )
-            Icon(
-                imageVector = Icons.Outlined.Smartphone,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+        Icon(
+            imageVector = Icons.Outlined.Smartphone,
+            contentDescription = null,
+            modifier = Modifier.size(196.dp)
+        )
         Box(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
