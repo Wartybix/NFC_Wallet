@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.OpenInFull
 import androidx.compose.material.icons.outlined.ArrowBack
@@ -48,7 +49,7 @@ fun ProjectionScreen(modifier: Modifier = Modifier) {
                 title = {},
                 navigationIcon = {
                     IconButton(onClick = {}) {
-                        Icon(imageVector = Icons.Outlined.ArrowBack, "Back")
+                        Icon(imageVector = Icons.Default.ArrowBack, "Back")
                     }
                 },
                 actions = {
@@ -60,7 +61,9 @@ fun ProjectionScreen(modifier: Modifier = Modifier) {
         }
     ) { padding ->
         Column(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier
+                .fillMaxSize()
+                .padding(padding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
