@@ -6,7 +6,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -63,22 +67,25 @@ fun ProjectionScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(padding),
+                .padding(padding)
+                .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Surface(
                 shape = MaterialTheme.shapes.extraLarge,
                 color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier.size(width = 256.dp, 160.dp),
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .aspectRatio(1.6f),
                 border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline)
             ) {
-                BadgeIcon(modifier = Modifier.padding(16.dp))
                 Box(contentAlignment = Alignment.TopEnd) {
                     Image(
                         painter = painterResource(id = R.drawable.pigeon),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
                     )
                     Surface(
                         color = MaterialTheme.colorScheme.inverseSurface,
@@ -100,7 +107,7 @@ fun ProjectionScreen(
 
             }
             Text(
-                text = "Card Name",
+                text = "Pigeon Card",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
