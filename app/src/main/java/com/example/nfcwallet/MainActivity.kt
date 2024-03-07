@@ -54,10 +54,10 @@ fun Menu(
                     composable(
                         route = WalletScreen.Home.name,
                         enterTransition = {
-                            slideInHorizontally( initialOffsetX = { -it / 2 } ) + fadeIn()
+                            slideInHorizontally( initialOffsetX = { -it / 2 } )
                         },
                         exitTransition = {
-                            slideOutHorizontally(targetOffsetX = { -it / 2 }) + fadeOut()
+                            slideOutHorizontally(targetOffsetX = { -it / 2 })
                         }
                     ) {
                         HomeScreen(
@@ -71,13 +71,13 @@ fun Menu(
                         route = WalletScreen.ProjectionReception.name,
                         enterTransition = {
                             slideInHorizontally(
-                                initialOffsetX = { it / 2 }
-                            ) + fadeIn()
+                                initialOffsetX = { it }
+                            )
                         },
                         exitTransition = {
                             slideOutHorizontally(
-                                targetOffsetX = { it / 2 }
-                            ) + fadeOut()
+                                targetOffsetX = { it }
+                            )
                         }
                     ) {
                         CommunicationScreen(true, onNavigateUp = { navController.navigateUp() })
