@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.nfcwallet.components.BadgeIcon
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 class MainActivity : ComponentActivity() {
@@ -78,16 +80,6 @@ fun Menu() {
             TagList(padding)
         }
     }
-}
-
-@Composable
-fun BadgeIcon(modifier: Modifier = Modifier) {
-    Icon(
-        imageVector = Icons.Outlined.Badge,
-        contentDescription = null,
-        modifier = modifier
-            .padding(12.dp)
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
