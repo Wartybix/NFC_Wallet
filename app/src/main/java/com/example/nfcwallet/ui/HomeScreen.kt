@@ -69,9 +69,9 @@ fun HomeScreen(
         ) {
             items(listData) { item ->
                 if (item.icon == null) {
-                    TagCard(item.name, null, onTagClicked, Modifier)
+                    TagCard(item.name, null, Modifier, onTagClicked)
                 } else {
-                    TagCard(item.name, ImageBitmap.imageResource(item.icon), onTagClicked, Modifier)
+                    TagCard(item.name, ImageBitmap.imageResource(item.icon), Modifier, onTagClicked)
                 }
             }
         }
@@ -82,8 +82,8 @@ fun HomeScreen(
 fun TagCard(
     name: String,
     icon: ImageBitmap?,
-    onClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClicked: () -> Unit = {}
 ) {
     Surface (
         shape = MaterialTheme.shapes.extraLarge,
@@ -128,7 +128,7 @@ fun TagCard(
 @Composable
 fun TagCardPreview() {
     NFCWalletTheme {
-        TagCard("Pigeon Card", ImageBitmap.imageResource(R.drawable.pigeon), {})
+        TagCard("Pigeon Card", ImageBitmap.imageResource(R.drawable.pigeon))
     }
 }
 
@@ -136,6 +136,6 @@ fun TagCardPreview() {
 @Composable
 fun TagCardPreviewNight() {
     NFCWalletTheme {
-        TagCard("Pigeon Card", ImageBitmap.imageResource(R.drawable.pigeon), {})
+        TagCard("Pigeon Card", ImageBitmap.imageResource(R.drawable.pigeon))
     }
 }
