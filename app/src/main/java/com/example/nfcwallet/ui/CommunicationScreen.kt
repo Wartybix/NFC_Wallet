@@ -74,7 +74,8 @@ fun ReceptionTutorialImage(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProjectionScreen(
+fun CommunicationScreen(
+    projectionMode: Boolean,
     modifier: Modifier = Modifier,
     onNavigateUp: () -> Unit = {}
 ) {
@@ -166,7 +167,7 @@ fun ReceptionTutorialIconPreview() {
 @Composable
 fun ProjectionPreview() {
     NFCWalletTheme {
-        ProjectionScreen()
+        CommunicationScreen(true)
     }
 }
 
@@ -174,6 +175,6 @@ fun ProjectionPreview() {
 @Composable
 fun ProjectionPreviewNight() {
     NFCWalletTheme {
-        ProjectionScreen()
+        CommunicationScreen(true)
     }
 }

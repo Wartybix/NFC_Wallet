@@ -20,7 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.nfcwallet.ui.HomeScreen
-import com.example.nfcwallet.ui.ProjectionScreen
+import com.example.nfcwallet.ui.CommunicationScreen
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 enum class WalletScreen {
@@ -80,7 +80,7 @@ fun Menu(
                             ) + fadeOut()
                         }
                     ) {
-                        ProjectionScreen(onNavigateUp = { navController.navigateUp() })
+                        CommunicationScreen(true, onNavigateUp = { navController.navigateUp() })
                     }
                 }
             }
