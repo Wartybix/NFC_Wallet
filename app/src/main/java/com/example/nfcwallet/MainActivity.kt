@@ -4,23 +4,28 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.nfcwallet.ui.TagList
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.nfcwallet.ui.HomeScreen
+import com.example.nfcwallet.ui.ProjectionScreen
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
+
+enum class WalletScreen {
+    Home,
+    ProjectionReception
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
             // A surface container using the 'background' color from the theme
@@ -31,21 +36,27 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Menu() {
+fun Menu(
+    navController: NavHostController = rememberNavController()
+) {
     NFCWalletTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(title = { Text(stringResource(R.string.app_name)) })
-            },
-            floatingActionButton = {
-                ExtendedFloatingActionButton(
-                    onClick = { /*TODO*/ },
-                    icon = { Icon(Icons.Default.Add, null) },
-                    text = { Text(stringResource(R.string.new_tag)) }
-                )
+        Column {
+            NavHost(
+                navController = navController,
+                startDestination = WalletScreen.Home.name,
+            ) {
+                composable(route = WalletScreen.Home.name) {
+                    HomeScreen(
+                        listData = tagTestData,
+                        onTagClicked = {
+                            navController.navigate(WalletScreen.ProjectionReception.name)
+                        }
+                    )
+                }
+                composable(route = WalletScreen.ProjectionReception.name) {
+                    ProjectionScreen()
+                }
             }
-        ) { padding ->
-            TagList(tagTestData, padding)
         }
     }
 }
