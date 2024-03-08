@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -54,10 +55,10 @@ fun Menu(
                     composable(
                         route = WalletScreen.Home.name,
                         enterTransition = {
-                            slideInHorizontally( initialOffsetX = { -it / 2 } )
+                            slideInHorizontally( initialOffsetX = { -it / 4 } )
                         },
                         exitTransition = {
-                            slideOutHorizontally(targetOffsetX = { -it / 2 })
+                            slideOutHorizontally(targetOffsetX = { -it / 4 })
                         }
                     ) {
                         HomeScreen(
@@ -70,13 +71,13 @@ fun Menu(
                     composable(
                         route = WalletScreen.ProjectionReception.name,
                         enterTransition = {
-                            slideInHorizontally(
-                                initialOffsetX = { it }
+                            slideIntoContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Start
                             )
                         },
                         exitTransition = {
-                            slideOutHorizontally(
-                                targetOffsetX = { it }
+                            slideOutOfContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.End
                             )
                         }
                     ) {
