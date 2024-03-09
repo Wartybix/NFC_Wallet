@@ -189,6 +189,35 @@ data class DrawableStringPair(
     val name: String
 )
 
+@Preview
+@Composable
+fun HomeAppBarPreview() {
+    NFCWalletTheme {
+        NfcWalletAppBar(
+            currentScreen = WalletScreen.Home, canNavigateBack = false, navigateUp = {}
+        )
+    }
+}
+@Preview
+@Composable
+fun CommunicationScreenAppBarPreview() {
+    NFCWalletTheme {
+        NfcWalletAppBar(
+            currentScreen = WalletScreen.ProjectionReception,
+            canNavigateBack = true,
+            navigateUp = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun NewTagFabPreview() {
+    NFCWalletTheme {
+        NewTagFAB(onClick = {})
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun AppPreview() {
