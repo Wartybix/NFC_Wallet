@@ -16,18 +16,14 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -46,7 +42,7 @@ import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 enum class WalletScreen {
     Home,
-    ProjectionReception
+    CommunicationScreen
 }
 
 class MainActivity : ComponentActivity() {
@@ -147,12 +143,12 @@ fun Menu(
                     listData = tagTestData,
                     systemPadding = innerPadding,
                     onTagClicked = {
-                        navController.navigate(WalletScreen.ProjectionReception.name)
+                        navController.navigate(WalletScreen.CommunicationScreen.name)
                     }
                 )
             }
             composable(
-                route = WalletScreen.ProjectionReception.name,
+                route = WalletScreen.CommunicationScreen.name,
                 enterTransition = {
                     slideIntoContainer(
                         towards = AnimatedContentTransitionScope.SlideDirection.Start
@@ -203,7 +199,7 @@ fun HomeAppBarPreview() {
 fun CommunicationScreenAppBarPreview() {
     NFCWalletTheme {
         NfcWalletAppBar(
-            currentScreen = WalletScreen.ProjectionReception,
+            currentScreen = WalletScreen.CommunicationScreen,
             canNavigateBack = true,
             navigateUp = {}
         )
