@@ -11,16 +11,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nfcwallet.DrawableStringPair
@@ -41,40 +34,30 @@ import com.example.nfcwallet.ui.theme.NFCWalletTheme
 @Composable
 fun HomeScreen(
     listData: List<DrawableStringPair>,
+    systemPadding: PaddingValues,
     onTagClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(id = R.string.app_name)) }) },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = { /*TODO*/ },
-                icon = { Icon(Icons.Default.Add, null) },
-                text = { Text(stringResource(R.string.new_tag)) }
-            )
-        }
-    ) { paddingValues ->
-        val verticalPadding = 16.dp
-        val horizontalPadding = 24.dp
+    val verticalPadding = 16.dp
+    val horizontalPadding = 24.dp
 
-        LazyColumn(
-            contentPadding = PaddingValues(
-                top = verticalPadding + paddingValues.calculateTopPadding(),
-                bottom = verticalPadding + paddingValues.calculateBottomPadding(),
-                start = horizontalPadding,
-                end = horizontalPadding
-            ),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = modifier
-        ) {
-            items(listData) { item ->
-                val icon: ImageBitmap? = if (item.icon == null) {
-                    null
-                } else {
-                    ImageBitmap.imageResource(item.icon)
-                }
-                TagCard(name = item.name, icon = icon, Modifier, onTagClicked)
+    LazyColumn(
+        contentPadding = PaddingValues(
+            top = verticalPadding + systemPadding.calculateTopPadding(),
+            bottom = verticalPadding + systemPadding.calculateBottomPadding(),
+            start = horizontalPadding,
+            end = horizontalPadding
+        ),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
+    ) {
+        items(listData) { item ->
+            val icon: ImageBitmap? = if (item.icon == null) {
+                null
+            } else {
+                ImageBitmap.imageResource(item.icon)
             }
+            TagCard(name = item.name, icon = icon, Modifier, onTagClicked)
         }
     }
 }

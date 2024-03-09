@@ -7,18 +7,38 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.nfcwallet.ui.HomeScreen
 import com.example.nfcwallet.ui.CommunicationScreen
@@ -42,48 +62,112 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun NfcWalletAppBar(
+    currentScreen: WalletScreen,
+    canNavigateBack: Boolean,
+    navigateUp: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    TopAppBar(
+        title = {
+            if (currentScreen == WalletScreen.Home) {
+                Text(stringResource(id = R.string.app_name))
+            }
+        },
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            }
+        },
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun NewTagFAB(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ExtendedFloatingActionButton(
+        onClick = onClick,
+        icon = { Icon(Icons.Default.Add, null) },
+        text = { Text(stringResource(id = R.string.new_tag)) },
+        modifier = modifier
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun Menu(
     navController: NavHostController = rememberNavController()
 ) {
-    NFCWalletTheme {
-        Surface {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = WalletScreen.valueOf(
+        backStackEntry?.destination?.route ?: WalletScreen.Home.name
+    )
+
+    Scaffold(
+        topBar = {
+            NfcWalletAppBar(
+                currentScreen = currentScreen,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() })
+        },
+        floatingActionButton = {
             Column {
-                NavHost(
-                    navController = navController,
-                    startDestination = WalletScreen.Home.name,
+                AnimatedVisibility(
+                    visible = currentScreen == WalletScreen.Home,
+                    enter = scaleIn() + fadeIn(),
+                    exit = scaleOut() + fadeOut()
                 ) {
-                    composable(
-                        route = WalletScreen.Home.name,
-                        enterTransition = {
-                            slideInHorizontally( initialOffsetX = { -it / 4 } )
-                        },
-                        exitTransition = {
-                            slideOutHorizontally(targetOffsetX = { -it / 4 })
-                        }
-                    ) {
-                        HomeScreen(
-                            listData = tagTestData,
-                            onTagClicked = {
-                                navController.navigate(WalletScreen.ProjectionReception.name)
-                            }
-                        )
-                    }
-                    composable(
-                        route = WalletScreen.ProjectionReception.name,
-                        enterTransition = {
-                            slideIntoContainer(
-                                towards = AnimatedContentTransitionScope.SlideDirection.Start
-                            )
-                        },
-                        exitTransition = {
-                            slideOutOfContainer(
-                                towards = AnimatedContentTransitionScope.SlideDirection.End
-                            )
-                        }
-                    ) {
-                        CommunicationScreen(true, onNavigateUp = { navController.navigateUp() })
-                    }
+                    NewTagFAB(onClick = { /*TODO*/ })
                 }
+            }
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = WalletScreen.Home.name
+        ) {
+            composable(
+                route = WalletScreen.Home.name,
+                enterTransition = {
+                    slideInHorizontally( initialOffsetX = { -it / 4 } )
+                },
+                exitTransition = {
+                    slideOutHorizontally(targetOffsetX = { -it / 4 })
+                }
+            ) {
+                HomeScreen(
+                    listData = tagTestData,
+                    systemPadding = innerPadding,
+                    onTagClicked = {
+                        navController.navigate(WalletScreen.ProjectionReception.name)
+                    }
+                )
+            }
+            composable(
+                route = WalletScreen.ProjectionReception.name,
+                enterTransition = {
+                    slideIntoContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.Start
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.End
+                    )
+                }
+            ) {
+                CommunicationScreen(
+                    projectionMode = true,
+                    modifier = Modifier.padding(innerPadding)
+                )
             }
         }
     }

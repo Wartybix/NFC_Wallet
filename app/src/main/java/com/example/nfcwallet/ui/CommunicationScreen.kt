@@ -78,86 +78,66 @@ fun ReceptionTutorialImage(
 fun CommunicationScreen(
     projectionMode: Boolean,
     modifier: Modifier = Modifier,
-    onNavigateUp: () -> Unit = {}
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(onClick = onNavigateUp) {
-                        Icon(imageVector = Icons.Default.ArrowBack, "Back")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = {}) {
-                        Icon(imageVector = Icons.Default.MoreVert, "More")
-                    }
-                }
-            )
-        }
-    ) { padding ->
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (projectionMode) {
-                Surface(
-                    shape = MaterialTheme.shapes.extraLarge,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .aspectRatio(1.6f),
-                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline)
-                ) {
-                    Box(contentAlignment = Alignment.TopEnd) {
-                        Image(
-                            painter = painterResource(id = R.drawable.pigeon),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                        Surface(
-                            color = MaterialTheme.colorScheme.inverseSurface,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .clip(CircleShape)
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (projectionMode) {
+            Surface(
+                shape = MaterialTheme.shapes.extraLarge,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .aspectRatio(1.6f),
+                border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline)
+            ) {
+                Box(contentAlignment = Alignment.TopEnd) {
+                    Image(
+                        painter = painterResource(id = R.drawable.pigeon),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    Surface(
+                        color = MaterialTheme.colorScheme.inverseSurface,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clip(CircleShape)
+                    ) {
+                        IconButton(
+                            onClick = { /*TODO*/ },
                         ) {
-                            IconButton(
-                                onClick = { /*TODO*/ },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.OpenInFull,
-                                    contentDescription = stringResource(R.string.expand_image),
-                                    tint = MaterialTheme.colorScheme.inverseOnSurface,
-                                )
-                            }
+                            Icon(
+                                imageVector = Icons.Default.OpenInFull,
+                                contentDescription = stringResource(R.string.expand_image),
+                                tint = MaterialTheme.colorScheme.inverseOnSurface,
+                            )
                         }
                     }
-
                 }
-                Text(
-                    text = "Pigeon Card",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
-                )
-            } else {
-                ReceptionTutorialImage(modifier = Modifier.padding(bottom = 16.dp))
-            }
 
+            }
             Text(
-                text = stringResource(
-                    R.string.place_the_back_of_your_phone_to_the_reader_when_ready),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 64.dp),
-                textAlign = TextAlign.Center
+                text = "Pigeon Card",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
             )
+        } else {
+            ReceptionTutorialImage(modifier = Modifier.padding(bottom = 16.dp))
         }
+
+        Text(
+            text = stringResource(
+                R.string.place_the_back_of_your_phone_to_the_reader_when_ready),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(horizontal = 64.dp),
+            textAlign = TextAlign.Center
+        )
     }
 }
 
