@@ -89,7 +89,6 @@ fun NewTagFAB(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun Menu(
     navController: NavHostController = rememberNavController()
