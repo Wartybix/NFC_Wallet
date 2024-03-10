@@ -7,6 +7,8 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -21,7 +23,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -95,15 +99,42 @@ fun NfcWalletAppBar(
     )
 }
 
+/**
+ * Returns whether the lazy list is currently scrolling up
+ * (from https://developer.android.com/codelabs/jetpack-compose-animation)
+ * Thank you Yuichi Araki and Rebecca Franks for the following function:
+ */
+@Composable
+private fun LazyListState.isScrollingUp(): Boolean {
+    var previousIndex by remember(this) { mutableIntStateOf(firstVisibleItemIndex) }
+    var previousScrollOffset by remember(this) {
+        mutableIntStateOf(firstVisibleItemScrollOffset)
+    }
+    return remember(this) {
+        derivedStateOf {
+            if (previousIndex != firstVisibleItemIndex) {
+                previousIndex > firstVisibleItemIndex
+            } else {
+                previousScrollOffset >= firstVisibleItemScrollOffset
+            }.also {
+                previousIndex = firstVisibleItemIndex
+                previousScrollOffset = firstVisibleItemScrollOffset
+            }
+        }
+    }.value
+}
+
 @Composable
 fun NewTagFAB(
     onClick: () -> Unit,
+    expanded: Boolean,
     modifier: Modifier = Modifier
 ) {
     ExtendedFloatingActionButton(
         onClick = onClick,
         icon = { Icon(Icons.Default.Add, null) },
         text = { Text(stringResource(id = R.string.new_tag)) },
+        expanded = expanded,
         modifier = modifier
     )
 }
@@ -116,6 +147,7 @@ fun Menu(
     val currentScreen = WalletScreen.valueOf(
         backStackEntry?.destination?.route ?: WalletScreen.Home.name
     )
+    val lazyListState = rememberLazyListState() // Saves state of the lazy column in the home page.
 
     Scaffold(
         topBar = {
@@ -127,7 +159,7 @@ fun Menu(
         floatingActionButton = {
             Column {
                 if (currentScreen == WalletScreen.Home) {
-                    NewTagFAB(onClick = { /*TODO*/ })
+                    NewTagFAB(onClick = { /*TODO*/ }, expanded = lazyListState.isScrollingUp())
                 }
             }
         }
@@ -150,7 +182,8 @@ fun Menu(
                     systemPadding = innerPadding,
                     onTagClicked = {
                         navController.navigate(WalletScreen.CommunicationScreen.name)
-                    }
+                    },
+                    lazyListState = lazyListState
                 )
             }
             composable(
@@ -214,9 +247,17 @@ fun CommunicationScreenAppBarPreview() {
 
 @Preview
 @Composable
-fun NewTagFabPreview() {
+fun NewTagFabExpandedPreview() {
     NFCWalletTheme {
-        NewTagFAB(onClick = {})
+        NewTagFAB(onClick = {}, expanded = true)
+    }
+}
+
+@Preview
+@Composable
+fun NewTagFabShrunkPreview() {
+    NFCWalletTheme {
+        NewTagFAB(onClick = {}, expanded = false)
     }
 }
 

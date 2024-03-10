@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +35,7 @@ fun HomeScreen(
     listData: List<DrawableStringPair>,
     systemPadding: PaddingValues,
     onTagClicked: () -> Unit,
+    lazyListState: LazyListState,
     modifier: Modifier = Modifier
 ) {
     val verticalPadding = 16.dp
@@ -47,6 +49,7 @@ fun HomeScreen(
             end = horizontalPadding
         ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
+        state = lazyListState,
         modifier = modifier
     ) {
         items(listData) { item ->
