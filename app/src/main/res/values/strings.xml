@@ -3,4 +3,8 @@
     <string name="new_tag">New Tag</string>
     <string name="expand_image">Expand image</string>
     <string name="place_the_back_of_your_phone_to_the_reader_when_ready">Place the back of your phone to the reader when ready.</string>
+    <string name="back">Back</string>
+    <string name="tag_options">Tag Options</string>
+    <string name="edit_tag">Edit Tag</string>
+    <string name="delete_tag">Delete Tag</string>
 </resources>

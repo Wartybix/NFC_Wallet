@@ -64,7 +64,7 @@ fun NfcWalletAppBar(
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back"
+                        contentDescription = stringResource(R.string.back)
                     )
                 }
             }
@@ -74,15 +74,21 @@ fun NfcWalletAppBar(
                 IconButton(onClick = { dropDownVisible = !dropDownVisible }) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
-                        contentDescription = "Tag Options"
+                        contentDescription = stringResource(R.string.tag_options)
                     )
                 }
                 DropdownMenu(
                     expanded = dropDownVisible,
                     onDismissRequest = { dropDownVisible = false }
                 ) {
-                    DropdownMenuItem(text = { Text("Edit Tag") }, onClick = { /*TODO*/ })
-                    DropdownMenuItem(text = { Text("Delete Tag") }, onClick = { /*TODO*/ })
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.edit_tag)) },
+                        onClick = { /*TODO*/ }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.delete_tag)) },
+                        onClick = { /*TODO*/ }
+                    )
                 }
             }
         },
