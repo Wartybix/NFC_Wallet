@@ -1,10 +1,6 @@
 package com.example.nfcwallet
 
 import android.content.res.Configuration
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -20,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -69,6 +66,16 @@ fun NfcWalletAppBar(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back"
+                    )
+                }
+            }
+        },
+        actions = {
+            if (currentScreen == WalletScreen.CommunicationScreen) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = "More"
                     )
                 }
             }
