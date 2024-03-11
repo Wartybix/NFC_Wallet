@@ -69,7 +69,6 @@ fun ReceptionTutorialImage(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommunicationScreen(
     projectionMode: Boolean,
