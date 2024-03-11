@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -73,6 +74,8 @@ fun ReceptionTutorialImage(
 fun CommunicationScreen(
     projectionMode: Boolean,
     modifier: Modifier = Modifier,
+    tagName: String = "",
+    tagImage: ImageBitmap? = null
 ) {
     Surface {
         Column(
@@ -118,7 +121,7 @@ fun CommunicationScreen(
 
                 }
                 Text(
-                    text = "Pigeon Card",
+                    text = tagName,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
