@@ -39,7 +39,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.nfcwallet.ui.HomeScreen
 import com.example.nfcwallet.ui.CommunicationScreen
+import com.example.nfcwallet.ui.WalletViewModel
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 enum class WalletScreen {
     Home,
@@ -141,7 +143,8 @@ fun NewTagFAB(
 
 @Composable
 fun Menu(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    viewModel: WalletViewModel = viewModel()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = WalletScreen.valueOf(
@@ -181,6 +184,7 @@ fun Menu(
                     listData = tagTestData,
                     systemPadding = innerPadding,
                     onTagClicked = {
+
                         navController.navigate(WalletScreen.CommunicationScreen.name)
                     },
                     lazyListState = lazyListState
