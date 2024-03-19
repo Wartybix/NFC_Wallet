@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nfcwallet.R
+import com.example.nfcwallet.components.BadgeIcon
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 @Composable
@@ -92,30 +94,35 @@ fun CommunicationScreen(
                         .aspectRatio(1.6f),
                     border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline)
                 ) {
-                    Box(contentAlignment = Alignment.TopEnd) {
-                        Image(
-                            painter = painterResource(id = R.drawable.pigeon),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                        Surface(
-                            color = MaterialTheme.colorScheme.inverseSurface,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .clip(CircleShape)
-                        ) {
-                            IconButton(
-                                onClick = { /*TODO*/ },
+                    if (tagImage != null) {
+                        Box(contentAlignment = Alignment.TopEnd) {
+                            Image(
+                                painter = painterResource(id = R.drawable.pigeon),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                            Surface(
+                                color = MaterialTheme.colorScheme.inverseSurface,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .clip(CircleShape)
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.OpenInFull,
-                                    contentDescription = stringResource(R.string.expand_image),
-                                    tint = MaterialTheme.colorScheme.inverseOnSurface,
-                                )
+                                IconButton(
+                                    onClick = { /*TODO*/ },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.OpenInFull,
+                                        contentDescription = stringResource(R.string.expand_image),
+                                        tint = MaterialTheme.colorScheme.inverseOnSurface,
+                                    )
+                                }
                             }
                         }
+                    } else {
+                        BadgeIcon()
                     }
+
 
                 }
                 Text(
@@ -151,7 +158,19 @@ fun ReceptionTutorialIconPreview() {
 @Composable
 fun ProjectionPreview() {
     NFCWalletTheme {
-        CommunicationScreen(true)
+        CommunicationScreen(projectionMode = true, tagName = "Generic Card")
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProjectionWithImagePreview() {
+    NFCWalletTheme {
+        CommunicationScreen(
+            projectionMode = true,
+            tagName = "Pigeon Card",
+            tagImage = ImageBitmap.imageResource(R.drawable.pigeon)
+        )
     }
 }
 
@@ -159,7 +178,19 @@ fun ProjectionPreview() {
 @Composable
 fun ProjectionPreviewNight() {
     NFCWalletTheme {
-        CommunicationScreen(true)
+        CommunicationScreen(true, tagName = "Generic Card")
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ProjectionWithImagePreviewNight() {
+    NFCWalletTheme {
+        CommunicationScreen(
+            projectionMode = true,
+            tagName = "Pigeon Card",
+            tagImage = ImageBitmap.imageResource(R.drawable.pigeon)
+        )
     }
 }
 
