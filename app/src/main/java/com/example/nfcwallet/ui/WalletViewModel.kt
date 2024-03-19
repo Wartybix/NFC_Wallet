@@ -25,9 +25,18 @@ class WalletViewModel : ViewModel() {
     val uiState: StateFlow<WalletUiState> = _uiState.asStateFlow()
     val _tags = getExampleData()
 
+    fun enableReceiver() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                projectionMode = false
+            )
+        }
+    }
+
     fun setTag(newTagName: String, newTagImage: Bitmap?) {
         _uiState.update {currentState ->
             currentState.copy(
+                projectionMode = true,
                 tagName = newTagName,
                 tagImage = newTagImage
             )

@@ -163,7 +163,13 @@ fun Menu(
         floatingActionButton = {
             Column {
                 if (currentScreen == WalletScreen.Home) {
-                    NewTagFAB(onClick = { /*TODO*/ }, expanded = lazyListState.isScrollingUp())
+                    NewTagFAB(
+                        onClick = {
+                            viewModel.enableReceiver()
+                            navController.navigate(WalletScreen.CommunicationScreen.name)
+                        },
+                        expanded = lazyListState.isScrollingUp()
+                    )
                 }
             }
         }
@@ -207,7 +213,7 @@ fun Menu(
                 }
             ) {
                 CommunicationScreen(
-                    projectionMode = true,
+                    projectionMode = uiState.projectionMode,
                     tagName = uiState.tagName,
                     tagImage = uiState.tagImage,
                     modifier = Modifier.padding(innerPadding)
