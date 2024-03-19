@@ -1,6 +1,8 @@
 package com.example.nfcwallet.ui
 
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -75,7 +78,7 @@ fun CommunicationScreen(
     projectionMode: Boolean,
     modifier: Modifier = Modifier,
     tagName: String = "",
-    tagImage: ImageBitmap? = null
+    tagImage: Bitmap? = null
 ) {
     Surface {
         Column(
@@ -169,7 +172,10 @@ fun ProjectionWithImagePreview() {
         CommunicationScreen(
             projectionMode = true,
             tagName = "Pigeon Card",
-            tagImage = ImageBitmap.imageResource(R.drawable.pigeon)
+            tagImage = BitmapFactory.decodeResource(
+                LocalContext.current.resources,
+                R.drawable.pigeon
+            )
         )
     }
 }
@@ -189,7 +195,10 @@ fun ProjectionWithImagePreviewNight() {
         CommunicationScreen(
             projectionMode = true,
             tagName = "Pigeon Card",
-            tagImage = ImageBitmap.imageResource(R.drawable.pigeon)
+            tagImage = BitmapFactory.decodeResource(
+                LocalContext.current.resources,
+                R.drawable.pigeon
+            )
         )
     }
 }

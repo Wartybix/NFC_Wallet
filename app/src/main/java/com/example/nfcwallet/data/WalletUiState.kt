@@ -1,8 +1,8 @@
 package com.example.nfcwallet.data
 
-import androidx.compose.ui.graphics.ImageBitmap
+import android.graphics.Bitmap
 
 data class WalletUiState(
     val tagName: String = "",
-    val tagImage: ImageBitmap? = null
+    val tagImage: Bitmap? = null
 )

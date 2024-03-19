@@ -2,6 +2,7 @@ package com.example.nfcwallet
 
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -23,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -167,6 +169,8 @@ fun Menu(
             }
         }
     ) { innerPadding ->
+        val uiState by viewModel.uiState.collectAsState()
+
         NavHost(
             navController = navController,
             startDestination = WalletScreen.Home.name
@@ -184,6 +188,7 @@ fun Menu(
                     listData = viewModel._tags,
                     systemPadding = innerPadding,
                     onTagClicked = {
+                        viewModel.setTag(it.name, it.icon)
                         navController.navigate(WalletScreen.CommunicationScreen.name)
                     },
                     lazyListState = lazyListState
@@ -202,8 +207,12 @@ fun Menu(
                     )
                 }
             ) {
+                Log.d("Open Communication", uiState.tagName) //TODO delete later
+
                 CommunicationScreen(
                     projectionMode = true,
+                    tagName = uiState.tagName,
+                    tagImage = uiState.tagImage,
                     modifier = Modifier.padding(innerPadding)
                 )
             }

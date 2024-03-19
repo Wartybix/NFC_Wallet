@@ -1,6 +1,6 @@
 package com.example.nfcwallet.ui
 
-import androidx.compose.ui.graphics.ImageBitmap
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import com.example.nfcwallet.DrawableStringPair
 import com.example.nfcwallet.data.WalletUiState
@@ -25,7 +25,7 @@ class WalletViewModel : ViewModel() {
     val uiState: StateFlow<WalletUiState> = _uiState.asStateFlow()
     val _tags = getExampleData()
 
-    fun setTag(newTagName: String, newTagImage: ImageBitmap?) {
+    fun setTag(newTagName: String, newTagImage: Bitmap?) {
         _uiState.update {currentState ->
             currentState.copy(
                 tagName = newTagName,
