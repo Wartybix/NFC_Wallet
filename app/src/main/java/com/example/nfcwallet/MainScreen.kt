@@ -2,7 +2,6 @@ package com.example.nfcwallet
 
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -207,8 +206,6 @@ fun Menu(
                     )
                 }
             ) {
-                Log.d("Open Communication", uiState.tagName) //TODO delete later
-
                 CommunicationScreen(
                     projectionMode = true,
                     tagName = uiState.tagName,
