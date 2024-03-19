@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +35,7 @@ import com.example.nfcwallet.ui.theme.NFCWalletTheme
 fun HomeScreen(
     listData: List<DrawableStringPair>,
     systemPadding: PaddingValues,
-    onTagClicked: () -> Unit,
+    onTagClicked: (DrawableStringPair) -> Unit,
     lazyListState: LazyListState,
     modifier: Modifier = Modifier
 ) {
@@ -56,9 +57,13 @@ fun HomeScreen(
             val icon: ImageBitmap? = if (item.icon == null) {
                 null
             } else {
-                ImageBitmap.imageResource(item.icon)
+                item.icon.asImageBitmap()
             }
-            TagCard(name = item.name, icon = icon, Modifier, onTagClicked)
+            TagCard(
+                name = item.name,
+                icon = icon,
+                Modifier,
+                onClicked = { onTagClicked(DrawableStringPair(item.icon, item.name)) })
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.example.nfcwallet
 
 import android.content.res.Configuration
-import androidx.annotation.DrawableRes
+import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -181,10 +181,9 @@ fun Menu(
                 }
             ) {
                 HomeScreen(
-                    listData = tagTestData,
+                    listData = viewModel._tags,
                     systemPadding = innerPadding,
                     onTagClicked = {
-
                         navController.navigate(WalletScreen.CommunicationScreen.name)
                     },
                     lazyListState = lazyListState
@@ -212,19 +211,9 @@ fun Menu(
     }
 }
 
-private val tagTestData = listOf(
-    R.drawable.pigeon to "Pigeon Card",
-    null to "Passport",
-    null to "Shopping Card",
-    null to "Other Card",
-    null to "Cardigan Card",
-    null to "Student Card",
-    null to "Staff Card",
-    null to "Cardboard card"
-).map { DrawableStringPair(it.first, it.second) }
 
 data class DrawableStringPair(
-    @DrawableRes val icon: Int?,
+    val icon: Bitmap?,
     val name: String
 )
 
