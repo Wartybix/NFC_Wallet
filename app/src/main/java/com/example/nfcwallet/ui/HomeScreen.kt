@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,17 +26,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.nfcwallet.DrawableStringPair
 import com.example.nfcwallet.R
+import com.example.nfcwallet.Tag
 import com.example.nfcwallet.components.BadgeIcon
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 
 @Composable
 fun HomeScreen(
-    listData: List<DrawableStringPair>,
+    listData: SnapshotStateList<Tag>,
     systemPadding: PaddingValues,
-    onTagClicked: (DrawableStringPair) -> Unit,
+    onTagClicked: (Tag) -> Unit,
     lazyListState: LazyListState,
     modifier: Modifier = Modifier
 ) {
@@ -54,16 +55,16 @@ fun HomeScreen(
         modifier = modifier
     ) {
         items(listData) { item ->
-            val icon: ImageBitmap? = if (item.icon == null) {
+            val icon: ImageBitmap? = if (item.image == null) {
                 null
             } else {
-                item.icon!!.asImageBitmap() //TODO remove non-null assertion
+                item.image!!.asImageBitmap() //TODO remove non-null assertion
             }
             TagCard(
                 name = item.name,
                 icon = icon,
                 Modifier,
-                onClicked = { onTagClicked(DrawableStringPair(item.icon, item.name)) })
+                onClicked = { onTagClicked(item) })
         }
     }
 }

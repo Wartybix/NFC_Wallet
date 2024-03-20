@@ -1,7 +1,6 @@
 package com.example.nfcwallet
 
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.slideInHorizontally
@@ -196,7 +195,7 @@ fun Menu(
                     listData = viewModel._tags,
                     systemPadding = innerPadding,
                     onTagClicked = {
-                        viewModel.setTag(it.name, it.icon)
+                        viewModel.setTag(it)
                         navController.navigate(WalletScreen.CommunicationScreen.name)
                     },
                     lazyListState = lazyListState
@@ -225,12 +224,6 @@ fun Menu(
         }
     }
 }
-
-
-data class DrawableStringPair(
-    var icon: Bitmap?, //TODO change back to val
-    val name: String
-)
 
 @Preview
 @Composable
