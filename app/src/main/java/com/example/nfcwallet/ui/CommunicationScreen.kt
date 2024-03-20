@@ -1,6 +1,8 @@
 package com.example.nfcwallet.ui
 
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInFull
 import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.Smartphone
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,8 +27,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nfcwallet.R
+import com.example.nfcwallet.components.BadgeIcon
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 @Composable
@@ -74,7 +76,7 @@ fun CommunicationScreen(
     projectionMode: Boolean,
     modifier: Modifier = Modifier,
     tagName: String = "",
-    tagImage: ImageBitmap? = null
+    tagImage: Bitmap? = null
 ) {
     Surface {
         Column(
@@ -93,30 +95,35 @@ fun CommunicationScreen(
                         .aspectRatio(1.6f),
                     border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline)
                 ) {
-                    Box(contentAlignment = Alignment.TopEnd) {
-                        Image(
-                            painter = painterResource(id = R.drawable.pigeon),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                        Surface(
-                            color = MaterialTheme.colorScheme.inverseSurface,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .clip(CircleShape)
-                        ) {
-                            IconButton(
-                                onClick = { /*TODO*/ },
+                    if (tagImage != null) {
+                        Box(contentAlignment = Alignment.TopEnd) {
+                            Image(
+                                painter = painterResource(id = R.drawable.pigeon),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                            Surface(
+                                color = MaterialTheme.colorScheme.inverseSurface,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .clip(CircleShape)
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.OpenInFull,
-                                    contentDescription = stringResource(R.string.expand_image),
-                                    tint = MaterialTheme.colorScheme.inverseOnSurface,
-                                )
+                                IconButton(
+                                    onClick = { /*TODO*/ },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.OpenInFull,
+                                        contentDescription = stringResource(R.string.expand_image),
+                                        tint = MaterialTheme.colorScheme.inverseOnSurface,
+                                    )
+                                }
                             }
                         }
+                    } else {
+                        BadgeIcon()
                     }
+
 
                 }
                 Text(
@@ -152,7 +159,22 @@ fun ReceptionTutorialIconPreview() {
 @Composable
 fun ProjectionPreview() {
     NFCWalletTheme {
-        CommunicationScreen(true)
+        CommunicationScreen(projectionMode = true, tagName = "Generic Card")
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProjectionWithImagePreview() {
+    NFCWalletTheme {
+        CommunicationScreen(
+            projectionMode = true,
+            tagName = "Pigeon Card",
+            tagImage = BitmapFactory.decodeResource(
+                LocalContext.current.resources,
+                R.drawable.pigeon
+            )
+        )
     }
 }
 
@@ -160,7 +182,22 @@ fun ProjectionPreview() {
 @Composable
 fun ProjectionPreviewNight() {
     NFCWalletTheme {
-        CommunicationScreen(true)
+        CommunicationScreen(true, tagName = "Generic Card")
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ProjectionWithImagePreviewNight() {
+    NFCWalletTheme {
+        CommunicationScreen(
+            projectionMode = true,
+            tagName = "Pigeon Card",
+            tagImage = BitmapFactory.decodeResource(
+                LocalContext.current.resources,
+                R.drawable.pigeon
+            )
+        )
     }
 }
 

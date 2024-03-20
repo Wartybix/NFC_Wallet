@@ -1,7 +1,7 @@
 package com.example.nfcwallet
 
 import android.content.res.Configuration
-import androidx.annotation.DrawableRes
+import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -39,7 +40,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.nfcwallet.ui.HomeScreen
 import com.example.nfcwallet.ui.CommunicationScreen
+import com.example.nfcwallet.ui.WalletViewModel
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 enum class WalletScreen {
     Home,
@@ -141,7 +144,8 @@ fun NewTagFAB(
 
 @Composable
 fun Menu(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    viewModel: WalletViewModel = viewModel()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = WalletScreen.valueOf(
@@ -159,11 +163,19 @@ fun Menu(
         floatingActionButton = {
             Column {
                 if (currentScreen == WalletScreen.Home) {
-                    NewTagFAB(onClick = { /*TODO*/ }, expanded = lazyListState.isScrollingUp())
+                    NewTagFAB(
+                        onClick = {
+                            viewModel.enableReceiver()
+                            navController.navigate(WalletScreen.CommunicationScreen.name)
+                        },
+                        expanded = lazyListState.isScrollingUp()
+                    )
                 }
             }
         }
     ) { innerPadding ->
+        val uiState by viewModel.uiState.collectAsState()
+
         NavHost(
             navController = navController,
             startDestination = WalletScreen.Home.name
@@ -178,9 +190,10 @@ fun Menu(
                 }
             ) {
                 HomeScreen(
-                    listData = tagTestData,
+                    listData = viewModel._tags,
                     systemPadding = innerPadding,
                     onTagClicked = {
+                        viewModel.setTag(it.name, it.icon)
                         navController.navigate(WalletScreen.CommunicationScreen.name)
                     },
                     lazyListState = lazyListState
@@ -200,7 +213,9 @@ fun Menu(
                 }
             ) {
                 CommunicationScreen(
-                    projectionMode = true,
+                    projectionMode = uiState.projectionMode,
+                    tagName = uiState.tagName,
+                    tagImage = uiState.tagImage,
                     modifier = Modifier.padding(innerPadding)
                 )
             }
@@ -208,19 +223,9 @@ fun Menu(
     }
 }
 
-private val tagTestData = listOf(
-    R.drawable.pigeon to "Pigeon Card",
-    null to "Passport",
-    null to "Shopping Card",
-    null to "Other Card",
-    null to "Cardigan Card",
-    null to "Student Card",
-    null to "Staff Card",
-    null to "Cardboard card"
-).map { DrawableStringPair(it.first, it.second) }
 
 data class DrawableStringPair(
-    @DrawableRes val icon: Int?,
+    val icon: Bitmap?,
     val name: String
 )
 
