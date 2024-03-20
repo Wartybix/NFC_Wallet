@@ -136,9 +136,15 @@ fun CommunicationScreen(
                 ReceptionTutorialImage(modifier = Modifier.padding(bottom = 16.dp))
             }
 
+            val instructionMsg = stringResource(
+                if (projectionMode)
+                    R.string.projection_instructions
+                else
+                    R.string.reception_instructions
+            )
+
             Text(
-                text = stringResource(
-                    R.string.place_the_back_of_your_phone_to_the_reader_when_ready),
+                text = instructionMsg,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(horizontal = 64.dp),
                 textAlign = TextAlign.Center
