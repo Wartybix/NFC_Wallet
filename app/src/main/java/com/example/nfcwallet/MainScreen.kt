@@ -52,9 +52,8 @@ enum class WalletScreen {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NfcWalletAppBar(
-    currentScreen: WalletScreen,
     canNavigateBack: Boolean,
-    showTagActions: Boolean,
+    showTagActions: Boolean = true,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -62,7 +61,7 @@ fun NfcWalletAppBar(
 
     TopAppBar(
         title = {
-            if (currentScreen == WalletScreen.Home) {
+            if (!canNavigateBack) {
                 Text(stringResource(id = R.string.app_name))
             }
         },
@@ -77,7 +76,7 @@ fun NfcWalletAppBar(
             }
         },
         actions = {
-            if (currentScreen == WalletScreen.CommunicationScreen && showTagActions) {
+            if (canNavigateBack && showTagActions) {
                 IconButton(onClick = { dropDownVisible = !dropDownVisible }) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
@@ -157,7 +156,6 @@ fun Menu(
     Scaffold(
         topBar = {
             NfcWalletAppBar(
-                currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 showTagActions = viewModel.uiState.collectAsState().value.projectionMode,
                 navigateUp = { navController.navigateUp() })
@@ -236,21 +234,30 @@ data class DrawableStringPair(
 fun HomeAppBarPreview() {
     NFCWalletTheme {
         NfcWalletAppBar(
-            currentScreen = WalletScreen.Home,
             canNavigateBack = false,
-            showTagActions = true,
             navigateUp = {}
         )
     }
 }
 @Preview
 @Composable
-fun CommunicationScreenAppBarPreview() {
+fun ProjectionScreenAppBarPreview() {
     NFCWalletTheme {
         NfcWalletAppBar(
-            currentScreen = WalletScreen.CommunicationScreen,
             canNavigateBack = true,
             showTagActions = true,
+            navigateUp = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ReceptionScreenAppBarPreview() {
+    NFCWalletTheme {
+        NfcWalletAppBar(
+            canNavigateBack = true,
+            showTagActions = false,
             navigateUp = {}
         )
     }
