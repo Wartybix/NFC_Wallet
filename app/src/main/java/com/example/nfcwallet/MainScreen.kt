@@ -54,6 +54,7 @@ enum class WalletScreen {
 fun NfcWalletAppBar(
     currentScreen: WalletScreen,
     canNavigateBack: Boolean,
+    showTagActions: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -76,7 +77,7 @@ fun NfcWalletAppBar(
             }
         },
         actions = {
-            if (currentScreen == WalletScreen.CommunicationScreen) {
+            if (currentScreen == WalletScreen.CommunicationScreen && showTagActions) {
                 IconButton(onClick = { dropDownVisible = !dropDownVisible }) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
@@ -158,6 +159,7 @@ fun Menu(
             NfcWalletAppBar(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
+                showTagActions = viewModel.uiState.collectAsState().value.projectionMode,
                 navigateUp = { navController.navigateUp() })
         },
         floatingActionButton = {
@@ -234,7 +236,10 @@ data class DrawableStringPair(
 fun HomeAppBarPreview() {
     NFCWalletTheme {
         NfcWalletAppBar(
-            currentScreen = WalletScreen.Home, canNavigateBack = false, navigateUp = {}
+            currentScreen = WalletScreen.Home,
+            canNavigateBack = false,
+            showTagActions = true,
+            navigateUp = {}
         )
     }
 }
@@ -245,6 +250,7 @@ fun CommunicationScreenAppBarPreview() {
         NfcWalletAppBar(
             currentScreen = WalletScreen.CommunicationScreen,
             canNavigateBack = true,
+            showTagActions = true,
             navigateUp = {}
         )
     }
