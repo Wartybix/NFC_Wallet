@@ -41,7 +41,7 @@ class WalletViewModel : ViewModel() {
     }
 
     fun setTag(newTagName: String, newTagImage: Bitmap?) {
-        _uiState.update {currentState ->
+        _uiState.update { currentState ->
             currentState.copy(
                 projectionMode = true,
                 tagName = newTagName,
