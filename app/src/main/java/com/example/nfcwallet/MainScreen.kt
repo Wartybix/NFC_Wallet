@@ -2,6 +2,7 @@ package com.example.nfcwallet
 
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -31,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -152,6 +154,7 @@ fun Menu(
         backStackEntry?.destination?.route ?: WalletScreen.Home.name
     )
     val lazyListState = rememberLazyListState() // Saves state of the lazy column in the home page.
+    viewModel.setTestImage(BitmapFactory.decodeResource(LocalContext.current.resources, R.drawable.pigeon))
 
     Scaffold(
         topBar = {
@@ -174,7 +177,7 @@ fun Menu(
             }
         }
     ) { innerPadding ->
-        val uiState by viewModel.uiState.collectAsState()
+        val uiState by viewModel.uiState.collectAsState() //TODO Hoist this up
 
         NavHost(
             navController = navController,
@@ -225,7 +228,7 @@ fun Menu(
 
 
 data class DrawableStringPair(
-    val icon: Bitmap?,
+    var icon: Bitmap?, //TODO change back to val
     val name: String
 )
 
