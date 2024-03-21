@@ -45,8 +45,7 @@ class WalletViewModel : ViewModel() {
         _uiState.update { currentState ->
             currentState.copy(
                 projectionMode = true,
-                tagName = tag.name,
-                tagImage = tag.image
+                selectedTag = tag,
             )
         }
     }

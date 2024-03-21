@@ -188,7 +188,7 @@ fun ProjectionWithImagePreview() {
 @Composable
 fun ProjectionPreviewNight() {
     NFCWalletTheme {
-        CommunicationScreen(true, tagName = "Generic Card")
+        CommunicationScreen(projectionMode = true, tagName = "Generic Card")
     }
 }
 
@@ -211,7 +211,7 @@ fun ProjectionWithImagePreviewNight() {
 @Composable
 fun ReceptionPreview() {
     NFCWalletTheme {
-        CommunicationScreen(false)
+        CommunicationScreen(projectionMode = true)
     }
 }
 
@@ -219,6 +219,6 @@ fun ReceptionPreview() {
 @Composable
 fun ReceptionPreviewNight() {
     NFCWalletTheme {
-        CommunicationScreen(false)
+        CommunicationScreen(projectionMode = true)
     }
 }

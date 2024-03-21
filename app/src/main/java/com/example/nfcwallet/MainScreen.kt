@@ -54,9 +54,10 @@ enum class WalletScreen {
 @Composable
 fun NfcWalletAppBar(
     canNavigateBack: Boolean,
+    modifier: Modifier = Modifier,
     showTagActions: Boolean = true,
-    navigateUp: () -> Unit,
-    modifier: Modifier = Modifier
+    onDelete: () -> Unit,
+    navigateUp: () -> Unit
 ) {
     var dropDownVisible by remember { mutableStateOf(false) }
 
@@ -94,7 +95,7 @@ fun NfcWalletAppBar(
                     )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.delete_tag)) },
-                        onClick = { /*TODO*/ }
+                        onClick = onDelete
                     )
                 }
             }
@@ -154,12 +155,14 @@ fun Menu(
     )
     val lazyListState = rememberLazyListState() // Saves state of the lazy column in the home page.
     viewModel.setTestImage(BitmapFactory.decodeResource(LocalContext.current.resources, R.drawable.pigeon))
+    val uiState = viewModel.uiState.collectAsState().value
 
     Scaffold(
         topBar = {
             NfcWalletAppBar(
                 canNavigateBack = navController.previousBackStackEntry != null,
-                showTagActions = viewModel.uiState.collectAsState().value.projectionMode,
+                showTagActions = uiState.projectionMode,
+                onDelete = { viewModel.removeTag(uiState.selectedTag) },
                 navigateUp = { navController.navigateUp() })
         },
         floatingActionButton = {
@@ -177,8 +180,6 @@ fun Menu(
             }
         }
     ) { innerPadding ->
-        val uiState by viewModel.uiState.collectAsState() //TODO Hoist this up
-
         NavHost(
             navController = navController,
             startDestination = WalletScreen.Home.name
@@ -217,8 +218,8 @@ fun Menu(
             ) {
                 CommunicationScreen(
                     projectionMode = uiState.projectionMode,
-                    tagName = uiState.tagName,
-                    tagImage = uiState.tagImage,
+                    tagName = uiState.selectedTag.name,
+                    tagImage = uiState.selectedTag.image,
                     modifier = Modifier.padding(innerPadding)
                 )
             }
@@ -232,7 +233,8 @@ fun HomeAppBarPreview() {
     NFCWalletTheme {
         NfcWalletAppBar(
             canNavigateBack = false,
-            navigateUp = {}
+            navigateUp = {},
+            onDelete = {}
         )
     }
 }
@@ -243,7 +245,8 @@ fun ProjectionScreenAppBarPreview() {
         NfcWalletAppBar(
             canNavigateBack = true,
             showTagActions = true,
-            navigateUp = {}
+            navigateUp = {},
+            onDelete = {}
         )
     }
 }
@@ -255,7 +258,8 @@ fun ReceptionScreenAppBarPreview() {
         NfcWalletAppBar(
             canNavigateBack = true,
             showTagActions = false,
-            navigateUp = {}
+            navigateUp = {},
+            onDelete = {}
         )
     }
 }
