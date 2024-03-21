@@ -12,15 +12,20 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -56,7 +61,7 @@ fun NfcWalletAppBar(
     canNavigateBack: Boolean,
     modifier: Modifier = Modifier,
     showTagActions: Boolean = true,
-    onDelete: () -> Unit,
+    onDeleteAction: () -> Unit,
     navigateUp: () -> Unit
 ) {
     var dropDownVisible by remember { mutableStateOf(false) }
@@ -95,7 +100,7 @@ fun NfcWalletAppBar(
                     )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.delete_tag)) },
-                        onClick = onDelete
+                        onClick = onDeleteAction
                     )
                 }
             }
@@ -145,6 +150,34 @@ fun NewTagFAB(
 }
 
 @Composable
+fun DeleteDialog(
+    onCancel: () -> Unit,
+    onConfirm: () -> Unit,
+    tagName: String
+) {
+    AlertDialog(
+        text = {
+            Text("Are you sure you want to delete tag '${tagName}'?")
+        },
+        onDismissRequest = { onCancel() },
+        confirmButton = {
+            FilledTonalButton(
+                onClick = onConfirm
+            ) {
+                Text("Delete")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onCancel
+            ) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@Composable
 fun Menu(
     navController: NavHostController = rememberNavController(),
     viewModel: WalletViewModel = viewModel()
@@ -156,13 +189,25 @@ fun Menu(
     val lazyListState = rememberLazyListState() // Saves state of the lazy column in the home page.
     viewModel.setTestImage(BitmapFactory.decodeResource(LocalContext.current.resources, R.drawable.pigeon))
     val uiState = viewModel.uiState.collectAsState().value
+    var deleteDialogShown by remember { mutableStateOf(false) }
+
+    if (deleteDialogShown) {
+        DeleteDialog(
+            onCancel = { deleteDialogShown = false },
+            onConfirm = {
+                deleteDialogShown = false
+                viewModel.removeTag(uiState.selectedTag)
+            },
+            tagName = uiState.selectedTag.name
+        )
+    }
 
     Scaffold(
         topBar = {
             NfcWalletAppBar(
                 canNavigateBack = navController.previousBackStackEntry != null,
                 showTagActions = uiState.projectionMode,
-                onDelete = { viewModel.removeTag(uiState.selectedTag) },
+                onDeleteAction = { deleteDialogShown = true },
                 navigateUp = { navController.navigateUp() })
         },
         floatingActionButton = {
@@ -234,7 +279,7 @@ fun HomeAppBarPreview() {
         NfcWalletAppBar(
             canNavigateBack = false,
             navigateUp = {},
-            onDelete = {}
+            onDeleteAction = {}
         )
     }
 }
@@ -246,7 +291,7 @@ fun ProjectionScreenAppBarPreview() {
             canNavigateBack = true,
             showTagActions = true,
             navigateUp = {},
-            onDelete = {}
+            onDeleteAction = {}
         )
     }
 }
@@ -259,7 +304,7 @@ fun ReceptionScreenAppBarPreview() {
             canNavigateBack = true,
             showTagActions = false,
             navigateUp = {},
-            onDelete = {}
+            onDeleteAction = {}
         )
     }
 }
@@ -277,6 +322,14 @@ fun NewTagFabExpandedPreview() {
 fun NewTagFabShrunkPreview() {
     NFCWalletTheme {
         NewTagFAB(onClick = {}, expanded = false)
+    }
+}
+
+@Preview
+@Composable
+fun DeleteDialogPreview() {
+    NFCWalletTheme {
+        DeleteDialog(onCancel = {}, onConfirm = {}, tagName = "Example Tag")
     }
 }
 
