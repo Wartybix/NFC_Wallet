@@ -100,7 +100,10 @@ fun NfcWalletAppBar(
                     )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.delete_tag)) },
-                        onClick = onDeleteAction
+                        onClick = {
+                            onDeleteAction()
+                            dropDownVisible = false
+                        }
                     )
                 }
             }
@@ -197,6 +200,7 @@ fun Menu(
             onConfirm = {
                 deleteDialogShown = false
                 viewModel.removeTag(uiState.selectedTag)
+                navController.navigateUp()
             },
             tagName = uiState.selectedTag.name
         )
