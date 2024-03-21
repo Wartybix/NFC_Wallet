@@ -168,6 +168,7 @@ fun Menu(
                     NewTagFAB(
                         onClick = {
                             viewModel.enableReceiver()
+                            viewModel.addTag(Tag("New Tag", null))
                             navController.navigate(WalletScreen.CommunicationScreen.name)
                         },
                         expanded = lazyListState.isScrollingUp()

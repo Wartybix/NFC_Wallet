@@ -50,4 +50,12 @@ class WalletViewModel : ViewModel() {
             )
         }
     }
+
+    fun addTag(tag: Tag) {
+        _tags.add(tag)
+    }
+
+    fun removeTag(tag: Tag) {
+        _tags.remove(tag)
+    }
 }
