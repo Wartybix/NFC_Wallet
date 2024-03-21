@@ -252,7 +252,7 @@ fun TagOptionsDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = onCancel) {
                         Text("Cancel")
                     }
                     FilledTonalButton(onClick = { /*TODO*/ }) {
@@ -280,7 +280,12 @@ fun Menu(
     var editDialogShown by remember { mutableStateOf(false) }
 
     if (editDialogShown) {
-
+        TagOptionsDialog(
+            onCancel = { editDialogShown = false },
+            onConfirm = {
+                editDialogShown = false
+            }
+        )
     }
 
     if (deleteDialogShown) {
