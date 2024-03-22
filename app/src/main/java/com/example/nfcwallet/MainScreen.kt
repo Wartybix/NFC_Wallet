@@ -236,11 +236,11 @@ fun TagOptionsDialog(
                     )
                 }
 
-                var tagName by remember { mutableStateOf(tagName) }
+                var newTagName by remember { mutableStateOf(tagName) }
 
                 OutlinedTextField(
                     value = tagName,
-                    onValueChange = { tagName = it },
+                    onValueChange = { newTagName = it },
                     label = { Text("Tag Name") }
                 )
 
