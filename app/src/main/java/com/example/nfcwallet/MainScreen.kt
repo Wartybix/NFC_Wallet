@@ -217,7 +217,7 @@ fun TagOptionsDialog(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(32.dp)
             ) {
                 val iconModifier = Modifier
                     .width(128.dp)
