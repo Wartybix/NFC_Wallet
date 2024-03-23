@@ -1,7 +1,6 @@
 package com.example.nfcwallet
 
 import android.content.res.Configuration
-import android.graphics.BitmapFactory
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -54,7 +53,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -326,7 +324,7 @@ fun Menu(
         backStackEntry?.destination?.route ?: WalletScreen.Home.name
     )
     val lazyListState = rememberLazyListState() // Saves state of the lazy column in the home page.
-    viewModel.setTestImage(BitmapFactory.decodeResource(LocalContext.current.resources, R.drawable.pigeon))
+    viewModel.setTestImage(ImageBitmap.imageResource(R.drawable.pigeon))
     val uiState = viewModel.uiState.collectAsState().value
     var deleteDialogShown by remember { mutableStateOf(false) }
     var editDialogShown by remember { mutableStateOf(false) }

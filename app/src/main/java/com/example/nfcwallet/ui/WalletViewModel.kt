@@ -1,7 +1,7 @@
 package com.example.nfcwallet.ui
 
-import android.graphics.Bitmap
 import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import com.example.nfcwallet.Tag
 import com.example.nfcwallet.data.WalletUiState
@@ -29,7 +29,7 @@ class WalletViewModel : ViewModel() {
     /**
      * TODO remove later
      */
-    fun setTestImage(image: Bitmap) {
+    fun setTestImage(image: ImageBitmap) {
         _tags[0].image = image
     }
 

@@ -1,8 +1,8 @@
 package com.example.nfcwallet
 
-import android.graphics.Bitmap
+import androidx.compose.ui.graphics.ImageBitmap
 
 class Tag(
     var name: String,
-    var image: Bitmap?,
+    var image: ImageBitmap?,
 )

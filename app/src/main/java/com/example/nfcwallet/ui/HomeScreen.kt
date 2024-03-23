@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,7 +57,7 @@ fun HomeScreen(
             val icon: ImageBitmap? = if (item.image == null) {
                 null
             } else {
-                item.image!!.asImageBitmap() //TODO remove non-null assertion
+                item.image //TODO remove non-null assertion
             }
             TagCard(
                 name = item.name,
