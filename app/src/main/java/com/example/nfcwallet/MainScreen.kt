@@ -221,13 +221,11 @@ fun TagOptionsDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(vertical = innerPadding)
             ) {
-                val iconModifier = Modifier
-                    .padding(horizontal = innerPadding)
-                    .fillMaxWidth()
-                    .aspectRatio(1.6f)
-
                 Surface(
-                    modifier = iconModifier,
+                    modifier = Modifier
+                        .padding(horizontal = innerPadding)
+                        .fillMaxWidth()
+                        .aspectRatio(1.6f),
                     color = MaterialTheme.colorScheme.primaryContainer,
                     shape = MaterialTheme.shapes.large
                 ) {
