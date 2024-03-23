@@ -290,7 +290,7 @@ fun TagOptionsDialog(
                 var newTagName by remember { mutableStateOf(tagName) }
 
                 OutlinedTextField(
-                    value = tagName,
+                    value = newTagName,
                     onValueChange = { newTagName = it },
                     label = { Text(stringResource(R.string.tag_name)) },
                     modifier = Modifier.padding(horizontal = innerPadding)
