@@ -57,7 +57,7 @@ fun HomeScreen(
             val icon: ImageBitmap? = if (item.image == null) {
                 null
             } else {
-                item.image //TODO remove non-null assertion
+                item.image
             }
             TagCard(
                 name = item.name,
