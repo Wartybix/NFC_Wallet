@@ -331,6 +331,8 @@ fun Menu(
 
     if (editDialogShown) {
         TagOptionsDialog(
+            image = uiState.selectedTag.image,
+            tagName = uiState.selectedTag.name,
             onCancel = { editDialogShown = false },
             onConfirm = {
                 editDialogShown = false
