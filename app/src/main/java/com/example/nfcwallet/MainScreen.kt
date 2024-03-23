@@ -183,21 +183,21 @@ fun DeleteDialog(
 ) {
     AlertDialog(
         text = {
-            Text("Are you sure you want to delete tag '${tagName}'?")
+            Text(stringResource(R.string.tag_delete_message, tagName))
         },
         onDismissRequest = { onCancel() },
         confirmButton = {
             FilledTonalButton(
                 onClick = onConfirm
             ) {
-                Text("Delete")
+                Text(stringResource(R.string.delete))
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onCancel
             ) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
@@ -234,7 +234,7 @@ fun TagOptionsDialog(
                     if (image == null) {
                         Icon(
                             imageVector = Icons.Outlined.HideImage,
-                            contentDescription = "No image attached",
+                            contentDescription = stringResource(R.string.no_image_attached),
                             modifier = Modifier.padding(32.dp)
                         )
                     } else {
@@ -255,10 +255,10 @@ fun TagOptionsDialog(
 
                         if (image == null) {
                             icon = Icons.Outlined.AddAPhoto
-                            caption = "Add Photo"
+                            caption = stringResource(R.string.add_photo)
                         } else {
                             icon = Icons.Outlined.Edit
-                            caption = "Edit Photo"
+                            caption = stringResource(R.string.edit_photo)
                         }
 
                         Icon(
@@ -280,7 +280,7 @@ fun TagOptionsDialog(
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                            Text("Remove Photo")
+                            Text(stringResource(R.string.remove_photo))
                         }
                     }
                 }
@@ -292,7 +292,7 @@ fun TagOptionsDialog(
                 OutlinedTextField(
                     value = tagName,
                     onValueChange = { newTagName = it },
-                    label = { Text("Tag Name") },
+                    label = { Text(stringResource(R.string.tag_name)) },
                     modifier = Modifier.padding(horizontal = innerPadding)
                 )
 
@@ -303,10 +303,10 @@ fun TagOptionsDialog(
                     horizontalArrangement = Arrangement.End,
                 ) {
                     TextButton(onClick = onCancel) {
-                        Text("Cancel")
+                        Text(stringResource(id = R.string.cancel))
                     }
                     FilledTonalButton(onClick = onConfirm, Modifier.padding(start = 8.dp)) {
-                        Text("Save")
+                        Text(stringResource(R.string.save))
                     }
                 }
             }

@@ -8,4 +8,13 @@
     <string name="edit_tag">Edit Tag</string>
     <string name="delete_tag">Delete Tag</string>
     <string name="reception_instructions">Place the card to the back of your phone when ready.</string>
+    <string name="tag_delete_message">Are you sure you want to delete tag \'%1$s\'?</string>
+    <string name="no_image_attached">No image attached</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="remove_photo">Remove Photo</string>
+    <string name="tag_name">Tag Name</string>
+    <string name="save">Save</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="edit_photo">Edit Photo</string>
 </resources>
