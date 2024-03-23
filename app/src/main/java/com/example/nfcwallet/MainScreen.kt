@@ -9,24 +9,29 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddPhotoAlternate
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.AddAPhoto
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.HideImage
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -47,21 +52,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.nfcwallet.ui.HomeScreen
 import com.example.nfcwallet.ui.CommunicationScreen
+import com.example.nfcwallet.ui.HomeScreen
 import com.example.nfcwallet.ui.WalletViewModel
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 enum class WalletScreen {
     Home,
@@ -205,53 +213,101 @@ fun TagOptionsDialog(
     onConfirm: () -> Unit
 ) {
      Dialog(onDismissRequest = onCancel) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+        ElevatedCard(
+            modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.extraLarge
         ) {
+            val innerPadding = 24.dp
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(32.dp)
+                modifier = Modifier.padding(vertical = innerPadding)
             ) {
                 val iconModifier = Modifier
-                    .width(128.dp)
-                    .height(96.dp)
-                if (image == null) {
-                    Surface(
-                        modifier = iconModifier,
-                        color = MaterialTheme.colorScheme.primaryContainer
-                    ) {
+                    .padding(horizontal = innerPadding)
+                    .fillMaxWidth()
+                    .aspectRatio(1.6f)
+
+                Surface(
+                    modifier = iconModifier,
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = MaterialTheme.shapes.large
+                ) {
+                    if (image == null) {
                         Icon(
-                            imageVector = Icons.Default.AddPhotoAlternate,
-                            contentDescription = "Add Photo"
+                            imageVector = Icons.Outlined.HideImage,
+                            contentDescription = "No image attached",
+                            modifier = Modifier.padding(32.dp)
                         )
+                    } else {
+                        Image(
+                            bitmap = image,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop
+                        )
+
                     }
-                } else {
-                    Image(
-                        bitmap = image,
-                        contentDescription = "Edit Photo",
-                        modifier = iconModifier
-                    )
                 }
+
+
+                Row(modifier = Modifier.padding(top = 8.dp)) {
+                    TextButton(onClick = { /*TODO*/ }) {
+                        val icon: ImageVector
+                        val caption: String
+
+                        if (image == null) {
+                            icon = Icons.Outlined.AddAPhoto
+                            caption = "Add Photo"
+                        } else {
+                            icon = Icons.Outlined.Edit
+                            caption = "Edit Photo"
+                        }
+
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = caption)
+                    }
+
+                    if (image != null) {
+                        TextButton(
+                            onClick = { /*TODO*/ }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.HideImage,
+                                contentDescription = null,
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text("Remove Photo")
+                        }
+                    }
+                }
+
+                HorizontalDivider(Modifier.padding(vertical = 32.dp))
 
                 var newTagName by remember { mutableStateOf(tagName) }
 
                 OutlinedTextField(
                     value = tagName,
                     onValueChange = { newTagName = it },
-                    label = { Text("Tag Name") }
+                    label = { Text("Tag Name") },
+                    modifier = Modifier.padding(horizontal = innerPadding)
                 )
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    modifier = Modifier
+                        .padding(top = innerPadding, end = innerPadding)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
                 ) {
                     TextButton(onClick = onCancel) {
                         Text("Cancel")
                     }
-                    FilledTonalButton(onClick = { /*TODO*/ }) {
+                    FilledTonalButton(onClick = onConfirm, Modifier.padding(start = 8.dp)) {
                         Text("Save")
                     }
                 }
@@ -431,6 +487,22 @@ fun DeleteDialogPreview() {
     }
 }
 
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun DeleteDialogPreviewNight() {
+    NFCWalletTheme {
+        DeleteDialog(onCancel = {}, onConfirm = {}, tagName = "Example Tag")
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun EditDialogPreviewNight() {
+    NFCWalletTheme {
+        TagOptionsDialog(onCancel = {}, onConfirm = {})
+    }
+}
+
 @Preview
 @Composable
 fun EditDialogPreview() {
@@ -438,6 +510,15 @@ fun EditDialogPreview() {
         TagOptionsDialog(onCancel = {}, onConfirm = {})
     }
 }
+
+@Preview
+@Composable
+fun EditDialogPreviewWithTag() {
+    NFCWalletTheme {
+        TagOptionsDialog(onCancel = {}, onConfirm = {}, image = ImageBitmap.imageResource(R.drawable.pigeon), tagName = "Example tag")
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
