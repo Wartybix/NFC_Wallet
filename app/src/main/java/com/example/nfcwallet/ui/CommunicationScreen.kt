@@ -120,7 +120,7 @@ fun CommunicationScreen(
                             }
                         }
                     } else {
-                        BadgeIcon()
+                        BadgeIcon(modifier = Modifier.padding(16.dp))
                     }
 
 
