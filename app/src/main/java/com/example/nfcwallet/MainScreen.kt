@@ -1,6 +1,7 @@
 package com.example.nfcwallet
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -206,8 +207,10 @@ fun DeleteDialog(
 @Composable
 fun TagOptionsDialog(
     image: ImageBitmap? = null,
-    newTagName: String = "",
+    tagName: String = "",
     onNameEdit: (String) -> Unit,
+    onImageAdd: (ImageBitmap?) -> Unit,
+    onImageRemove: () -> Unit,
     onCancel: () -> Unit,
     onConfirm: () -> Unit
 ) {
@@ -271,7 +274,7 @@ fun TagOptionsDialog(
 
                     if (image != null) {
                         TextButton(
-                            onClick = { /*TODO*/ }
+                            onClick = onImageRemove
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.HideImage,
@@ -287,7 +290,7 @@ fun TagOptionsDialog(
                 HorizontalDivider(Modifier.padding(vertical = 32.dp))
 
                 OutlinedTextField(
-                    value = newTagName,
+                    value = tagName,
                     onValueChange = onNameEdit,
                     label = { Text(stringResource(R.string.tag_name)) },
                     modifier = Modifier.padding(horizontal = innerPadding)
@@ -332,11 +335,14 @@ fun Menu(
 
         TagOptionsDialog(
             image = newTagImage,
-            newTagName = newTagName,
+            tagName = newTagName,
             onCancel = { editDialogShown = false },
             onNameEdit = { newTagName = it },
+            onImageAdd = {/*TODO*/},
+            onImageRemove = { newTagImage = null },
             onConfirm = {
                 uiState.selectedTag.name = newTagName
+                uiState.selectedTag.image = newTagImage
                 editDialogShown = false
             }
         )
@@ -501,7 +507,13 @@ fun DeleteDialogPreviewNight() {
 @Composable
 fun EditDialogPreviewNight() {
     NFCWalletTheme {
-        TagOptionsDialog(onCancel = {}, onConfirm = {}, onNameEdit = {})
+        TagOptionsDialog(
+            onCancel = {},
+            onConfirm = {},
+            onNameEdit = {},
+            onImageRemove = {},
+            onImageAdd = {}
+        )
     }
 }
 
@@ -509,7 +521,13 @@ fun EditDialogPreviewNight() {
 @Composable
 fun EditDialogPreview() {
     NFCWalletTheme {
-        TagOptionsDialog(onCancel = {}, onConfirm = {}, onNameEdit = {})
+        TagOptionsDialog(
+            onCancel = {},
+            onConfirm = {},
+            onNameEdit = {},
+            onImageAdd = {},
+            onImageRemove = {}
+        )
     }
 }
 
@@ -522,7 +540,9 @@ fun EditDialogPreviewWithTag() {
             onConfirm = {},
             onNameEdit = {},
             image = ImageBitmap.imageResource(R.drawable.pigeon),
-            newTagName = "Example tag"
+            tagName = "Example tag",
+            onImageAdd = {},
+            onImageRemove = {}
         )
     }
 }
@@ -536,7 +556,9 @@ fun EditDialogPreviewWithTagNight() {
             onConfirm = {},
             onNameEdit = {},
             image = ImageBitmap.imageResource(R.drawable.pigeon),
-            newTagName = "Example tag"
+            tagName = "Example tag",
+            onImageAdd = {},
+            onImageRemove = {}
         )
     }
 }
