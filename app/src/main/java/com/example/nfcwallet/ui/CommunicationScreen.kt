@@ -58,7 +58,7 @@ fun ReceptionTutorialImage(
             Box(
                 modifier = Modifier
                     .padding(vertical = 24.dp, horizontal = 16.dp)
-                    .background(MaterialTheme.colorScheme.tertiaryContainer)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
                     .fillMaxSize()
             )
             Icon(
