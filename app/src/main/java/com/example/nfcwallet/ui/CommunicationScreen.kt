@@ -114,7 +114,6 @@ fun CommunicationScreen(
                                     Icon(
                                         imageVector = Icons.Default.OpenInFull,
                                         contentDescription = stringResource(R.string.expand_image),
-                                        //tint = MaterialTheme.colorScheme.inverseOnSurface,
                                     )
                                 }
                             }
