@@ -517,6 +517,14 @@ fun EditDialogPreviewWithTag() {
     }
 }
 
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun EditDialogPreviewWithTagNight() {
+    NFCWalletTheme {
+        TagOptionsDialog(onCancel = {}, onConfirm = {}, image = ImageBitmap.imageResource(R.drawable.pigeon), tagName = "Example tag")
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
