@@ -61,7 +61,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     private val _uiState = MutableStateFlow(WalletUiState())
 
     val uiState: StateFlow<WalletUiState> = _uiState.asStateFlow()
-    val _tags = loadTagsFromStorage(getApplication<Application>().applicationContext)
+    val tags = loadTagsFromStorage(getApplication<Application>().applicationContext)
 
 
     fun enableReceiver() {
@@ -82,12 +82,12 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun addTag(tag: Tag) {
-        _tags.add(tag)
-        saveTagsToStorage(getApplication<Application>().applicationContext, _tags)
+        tags.add(tag)
+        saveTagsToStorage(getApplication<Application>().applicationContext, tags)
     }
 
     fun removeTag(tag: Tag) {
-        _tags.remove(tag)
-        saveTagsToStorage(getApplication<Application>().applicationContext, _tags)
+        tags.remove(tag)
+        saveTagsToStorage(getApplication<Application>().applicationContext, tags)
     }
 }

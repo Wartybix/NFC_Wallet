@@ -427,7 +427,7 @@ fun Menu(
                 }
             ) {
                 HomeScreen(
-                    listData = viewModel._tags,
+                    listData = viewModel.tags,
                     systemPadding = innerPadding,
                     onTagClicked = {
                         viewModel.setTag(it)
