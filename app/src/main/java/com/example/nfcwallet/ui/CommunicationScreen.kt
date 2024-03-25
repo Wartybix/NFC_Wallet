@@ -28,9 +28,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -77,7 +79,7 @@ fun CommunicationScreen(
     projectionMode: Boolean,
     modifier: Modifier = Modifier,
     tagName: String = "",
-    tagImage: Bitmap? = null,
+    tagImage: ImageBitmap? = null,
     onTagScan: () -> Unit
 ) {
     Surface {
@@ -100,7 +102,7 @@ fun CommunicationScreen(
                     if (tagImage != null) {
                         Box(contentAlignment = Alignment.TopEnd) {
                             Image(
-                                bitmap = tagImage.asImageBitmap(),
+                                bitmap = tagImage,
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier.fillMaxSize()
@@ -183,10 +185,7 @@ fun ProjectionWithImagePreview() {
         CommunicationScreen(
             projectionMode = true,
             tagName = "Pigeon Card",
-            tagImage = BitmapFactory.decodeResource(
-                LocalContext.current.resources,
-                R.drawable.pigeon
-            ),
+            tagImage = ImageBitmap.imageResource(id = R.drawable.pigeon),
             onTagScan = {}
         )
     }
@@ -207,10 +206,7 @@ fun ProjectionWithImagePreviewNight() {
         CommunicationScreen(
             projectionMode = true,
             tagName = "Pigeon Card",
-            tagImage = BitmapFactory.decodeResource(
-                LocalContext.current.resources,
-                R.drawable.pigeon
-            ),
+            tagImage = ImageBitmap.imageResource(R.drawable.pigeon),
             onTagScan = {}
         )
     }
