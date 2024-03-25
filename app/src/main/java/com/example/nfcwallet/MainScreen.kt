@@ -624,20 +624,3 @@ fun EditDialogPreviewWithTagNight() {
         )
     }
 }
-
-
-@Preview(showBackground = true)
-@Composable
-fun AppPreview() {
-    NFCWalletTheme {
-        Menu()
-    }
-}
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun AppPreviewNight() {
-    NFCWalletTheme {
-        Menu()
-    }
-}
