@@ -26,13 +26,6 @@ class WalletViewModel : ViewModel() {
     val uiState: StateFlow<WalletUiState> = _uiState.asStateFlow()
     val _tags = getExampleData().toMutableStateList()
 
-    /**
-     * TODO remove later
-     */
-    fun setTestImage(image: ImageBitmap) {
-        _tags[0].image = image
-    }
-
     fun enableReceiver() {
         _uiState.update { currentState ->
             currentState.copy(

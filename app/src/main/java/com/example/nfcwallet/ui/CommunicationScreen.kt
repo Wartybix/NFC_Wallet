@@ -97,7 +97,7 @@ fun CommunicationScreen(
                     if (tagImage != null) {
                         Box(contentAlignment = Alignment.TopEnd) {
                             Image(
-                                painter = painterResource(id = R.drawable.pigeon),
+                                bitmap = tagImage,
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier.fillMaxSize()

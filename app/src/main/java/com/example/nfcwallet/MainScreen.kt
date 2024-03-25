@@ -334,7 +334,6 @@ fun Menu(
         backStackEntry?.destination?.route ?: WalletScreen.Home.name
     )
     val lazyListState = rememberLazyListState() // Saves state of the lazy column in the home page.
-    viewModel.setTestImage(ImageBitmap.imageResource(R.drawable.pigeon))
     val uiState = viewModel.uiState.collectAsState().value
     var deleteDialogShown by remember { mutableStateOf(false) }
     var editDialogShown by remember { mutableStateOf(false) }
