@@ -1,7 +1,14 @@
 package com.example.nfcwallet
 
 import android.content.res.Configuration
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.os.Build.VERSION_CODES
+import android.provider.MediaStore
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -52,13 +59,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -209,7 +219,7 @@ fun TagOptionsDialog(
     image: ImageBitmap? = null,
     tagName: String = "",
     onNameEdit: (String) -> Unit,
-    onImageAdd: (ImageBitmap?) -> Unit,
+    onImageAdd: () -> Unit,
     onImageRemove: () -> Unit,
     onCancel: () -> Unit,
     onConfirm: () -> Unit
@@ -251,7 +261,7 @@ fun TagOptionsDialog(
 
 
                 Row(modifier = Modifier.padding(top = 8.dp)) {
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = onImageAdd) {
                         val icon: ImageVector
                         val caption: String
 
@@ -330,15 +340,31 @@ fun Menu(
     var editDialogShown by remember { mutableStateOf(false) }
 
     if (editDialogShown) {
+        val contentResolver = LocalContext.current.contentResolver
+
         var newTagName by remember { mutableStateOf(uiState.selectedTag.name) }
         var newTagImage by remember { mutableStateOf(uiState.selectedTag.image) }
+        var newTagImageUri by remember { mutableStateOf<Uri?>(null) }
+        val launcher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.GetContent()
+        ) { uri: Uri? ->
+            if (uri != null) {
+                newTagImage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
+                        .asImageBitmap()
+                else
+                    MediaStore.Images.Media.getBitmap(contentResolver, uri).asImageBitmap()
+            }
+        }
 
         TagOptionsDialog(
             image = newTagImage,
             tagName = newTagName,
             onCancel = { editDialogShown = false },
             onNameEdit = { newTagName = it },
-            onImageAdd = {/*TODO*/},
+            onImageAdd = {
+                launcher.launch("image/*")
+            },
             onImageRemove = { newTagImage = null },
             onConfirm = {
                 uiState.selectedTag.name = newTagName
