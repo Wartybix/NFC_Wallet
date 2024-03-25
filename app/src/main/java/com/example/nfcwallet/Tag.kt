@@ -6,9 +6,10 @@ import java.io.ByteArrayOutputStream
 import java.io.Serializable
 
 class Tag(
-    var name: String,
-    private var image: ByteArray?
+    var name: String
 ) : Serializable {
+    private var image: ByteArray? = null
+
     fun getImage() : Bitmap? {
         if (image == null) {
             return null

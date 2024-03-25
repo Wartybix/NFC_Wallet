@@ -344,8 +344,12 @@ fun Menu(
     if (editDialogShown) {
         val contentResolver = LocalContext.current.contentResolver
 
-        var newTagName by remember { mutableStateOf(uiState.selectedTag.name) }
-        var newTagImage by remember { mutableStateOf(uiState.selectedTag.getImage()) }
+        var newTagName by remember {
+            mutableStateOf(if (uiState.projectionMode) uiState.selectedTag.name else "")
+        }
+        var newTagImage by remember {
+            mutableStateOf(if (uiState.projectionMode) uiState.selectedTag.getImage() else null)
+        }
 
         /*
         Thank you to 'Ika' on Stack Overflow.
@@ -374,8 +378,17 @@ fun Menu(
             },
             onImageRemove = { newTagImage = null },
             onConfirm = {
-                uiState.selectedTag.name = newTagName
-                uiState.selectedTag.setImage(newTagImage)
+                if (uiState.projectionMode) {
+                    uiState.selectedTag.name = newTagName
+                    uiState.selectedTag.setImage(newTagImage)
+                } else {
+                    val newTag = Tag(newTagName)
+                    newTag.setImage(newTagImage)
+                    viewModel.addTag(newTag)
+
+                    navController.navigateUp()
+                }
+
                 viewModel.saveTags()
                 editDialogShown = false
             }
@@ -409,7 +422,6 @@ fun Menu(
                 NewTagFAB(
                     onClick = {
                         viewModel.enableReceiver()
-                        viewModel.addTag(Tag("New Tag", null)) //TODO remove
                         navController.navigate(WalletScreen.CommunicationScreen.name)
                     },
                     expanded = lazyListState.isScrollingUp()
@@ -445,7 +457,6 @@ fun Menu(
                         appName = stringResource(id = R.string.app_name),
                         onContinue = {
                             viewModel.enableReceiver()
-                            viewModel.addTag(Tag("New Tag", null)) //TODO remove
                             navController.navigate(WalletScreen.CommunicationScreen.name)
                         },
                         modifier = Modifier
@@ -472,7 +483,8 @@ fun Menu(
                     projectionMode = uiState.projectionMode,
                     tagName = uiState.selectedTag.name,
                     tagImage = uiState.selectedTag.getImage(),
-                    modifier = Modifier.padding(innerPadding)
+                    modifier = Modifier.padding(innerPadding),
+                    onTagScan = { editDialogShown = true }
                 )
             }
         }

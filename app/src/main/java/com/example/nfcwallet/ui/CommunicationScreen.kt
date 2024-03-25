@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInFull
 import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.Smartphone
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -79,7 +80,8 @@ fun CommunicationScreen(
     projectionMode: Boolean,
     modifier: Modifier = Modifier,
     tagName: String = "",
-    tagImage: Bitmap? = null
+    tagImage: Bitmap? = null,
+    onTagScan: () -> Unit
 ) {
     Surface {
         Column(
@@ -151,6 +153,12 @@ fun CommunicationScreen(
                 modifier = Modifier.padding(horizontal = 64.dp),
                 textAlign = TextAlign.Center
             )
+
+            if (!projectionMode) {
+                Button(onClick = onTagScan, modifier = modifier.padding(top = 16.dp)) {
+                    Text(text = "Add tag")
+                }
+            }
         }
     }
 }
@@ -167,7 +175,7 @@ fun ReceptionTutorialIconPreview() {
 @Composable
 fun ProjectionPreview() {
     NFCWalletTheme {
-        CommunicationScreen(projectionMode = true, tagName = "Generic Card")
+        CommunicationScreen(projectionMode = true, tagName = "Generic Card", onTagScan = {})
     }
 }
 
@@ -181,7 +189,8 @@ fun ProjectionWithImagePreview() {
             tagImage = BitmapFactory.decodeResource(
                 LocalContext.current.resources,
                 R.drawable.pigeon
-            )
+            ),
+            onTagScan = {}
         )
     }
 }
@@ -190,7 +199,7 @@ fun ProjectionWithImagePreview() {
 @Composable
 fun ProjectionPreviewNight() {
     NFCWalletTheme {
-        CommunicationScreen(projectionMode = true, tagName = "Generic Card")
+        CommunicationScreen(projectionMode = true, tagName = "Generic Card", onTagScan = {})
     }
 }
 
@@ -204,7 +213,8 @@ fun ProjectionWithImagePreviewNight() {
             tagImage = BitmapFactory.decodeResource(
                 LocalContext.current.resources,
                 R.drawable.pigeon
-            )
+            ),
+            onTagScan = {}
         )
     }
 }
@@ -213,7 +223,7 @@ fun ProjectionWithImagePreviewNight() {
 @Composable
 fun ReceptionPreview() {
     NFCWalletTheme {
-        CommunicationScreen(projectionMode = false)
+        CommunicationScreen(projectionMode = false, onTagScan = {})
     }
 }
 
@@ -221,6 +231,6 @@ fun ReceptionPreview() {
 @Composable
 fun ReceptionPreviewNight() {
     NFCWalletTheme {
-        CommunicationScreen(projectionMode = false)
+        CommunicationScreen(projectionMode = false, onTagScan = {})
     }
 }
