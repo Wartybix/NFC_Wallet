@@ -81,13 +81,17 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun saveTags() {
+        saveTagsToStorage(getApplication<Application>().applicationContext, tags)
+    }
+
     fun addTag(tag: Tag) {
         tags.add(tag)
-        saveTagsToStorage(getApplication<Application>().applicationContext, tags)
+        saveTags()
     }
 
     fun removeTag(tag: Tag) {
         tags.remove(tag)
-        saveTagsToStorage(getApplication<Application>().applicationContext, tags)
+        saveTags()
     }
 }

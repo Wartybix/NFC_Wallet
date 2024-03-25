@@ -1,6 +1,8 @@
 package com.example.nfcwallet
 
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -214,7 +216,7 @@ fun DeleteDialog(
 
 @Composable
 fun TagOptionsDialog(
-    image: ImageBitmap? = null,
+    image: Bitmap? = null,
     tagName: String = "",
     onNameEdit: (String) -> Unit,
     onImageAdd: () -> Unit,
@@ -249,7 +251,7 @@ fun TagOptionsDialog(
                         )
                     } else {
                         Image(
-                            bitmap = image,
+                            bitmap = image.asImageBitmap(),
                             contentDescription = null,
                             contentScale = ContentScale.Crop
                         )
@@ -340,7 +342,7 @@ fun Menu(
         val contentResolver = LocalContext.current.contentResolver
 
         var newTagName by remember { mutableStateOf(uiState.selectedTag.name) }
-        var newTagImage by remember { mutableStateOf(uiState.selectedTag.image) }
+        var newTagImage by remember { mutableStateOf(uiState.selectedTag.getImage()) }
 
         /*
         Thank you to 'Ika' on Stack Overflow.
@@ -353,9 +355,8 @@ fun Menu(
             if (uri != null) {
                 newTagImage = if (Build.VERSION.SDK_INT >= VERSION_CODES.P)
                     ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
-                        .asImageBitmap()
                 else
-                    MediaStore.Images.Media.getBitmap(contentResolver, uri).asImageBitmap()
+                    MediaStore.Images.Media.getBitmap(contentResolver, uri)
             }
         }
         /* ************************************************************************************** */
@@ -371,7 +372,8 @@ fun Menu(
             onImageRemove = { newTagImage = null },
             onConfirm = {
                 uiState.selectedTag.name = newTagName
-                uiState.selectedTag.image = newTagImage
+                uiState.selectedTag.setImage(newTagImage)
+                viewModel.saveTags()
                 editDialogShown = false
             }
         )
@@ -452,7 +454,7 @@ fun Menu(
                 CommunicationScreen(
                     projectionMode = uiState.projectionMode,
                     tagName = uiState.selectedTag.name,
-                    tagImage = uiState.selectedTag.image,
+                    tagImage = uiState.selectedTag.getImage(),
                     modifier = Modifier.padding(innerPadding)
                 )
             }
@@ -568,7 +570,7 @@ fun EditDialogPreviewWithTag() {
             onCancel = {},
             onConfirm = {},
             onNameEdit = {},
-            image = ImageBitmap.imageResource(R.drawable.pigeon),
+            image = BitmapFactory.decodeResource(LocalContext.current.resources, R.drawable.pigeon),
             tagName = "Example tag",
             onImageAdd = {},
             onImageRemove = {}
@@ -584,7 +586,7 @@ fun EditDialogPreviewWithTagNight() {
             onCancel = {},
             onConfirm = {},
             onNameEdit = {},
-            image = ImageBitmap.imageResource(R.drawable.pigeon),
+            image = BitmapFactory.decodeResource(LocalContext.current.resources, R.drawable.pigeon),
             tagName = "Example tag",
             onImageAdd = {},
             onImageRemove = {}

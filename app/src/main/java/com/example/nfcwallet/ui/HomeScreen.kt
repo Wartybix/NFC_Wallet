@@ -1,6 +1,8 @@
 package com.example.nfcwallet.ui
 
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,7 +24,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,10 +59,10 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize()
     ) {
         items(listData) { item ->
-            val icon: ImageBitmap? = if (item.image == null) {
+            val icon: Bitmap? = if (item.getImage() == null) {
                 null
             } else {
-                item.image
+                item.getImage()
             }
             TagCard(
                 name = item.name,
@@ -72,7 +76,7 @@ fun HomeScreen(
 @Composable
 fun TagCard(
     name: String,
-    icon: ImageBitmap?,
+    icon: Bitmap?,
     modifier: Modifier = Modifier,
     onClicked: () -> Unit = {}
 ) {
@@ -100,7 +104,7 @@ fun TagCard(
 
             } else {
                 Image(
-                    bitmap = icon,
+                    bitmap = icon.asImageBitmap(),
                     contentDescription = null,
                     contentScale = iconContentScale,
                     modifier = iconModifier
@@ -119,7 +123,7 @@ fun TagCard(
 @Composable
 fun TagCardPreview() {
     NFCWalletTheme {
-        TagCard("Pigeon Card", ImageBitmap.imageResource(R.drawable.pigeon))
+        TagCard("Pigeon Card", BitmapFactory.decodeResource(LocalContext.current.resources, R.drawable.pigeon))
     }
 }
 
@@ -127,6 +131,6 @@ fun TagCardPreview() {
 @Composable
 fun TagCardPreviewNight() {
     NFCWalletTheme {
-        TagCard("Pigeon Card", ImageBitmap.imageResource(R.drawable.pigeon))
+        TagCard("Pigeon Card", BitmapFactory.decodeResource(LocalContext.current.resources, R.drawable.pigeon))
     }
 }
