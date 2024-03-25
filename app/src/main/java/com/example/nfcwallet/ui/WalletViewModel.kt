@@ -63,6 +63,9 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     val uiState: StateFlow<WalletUiState> = _uiState.asStateFlow()
     val tags = loadTagsFromStorage(getApplication<Application>().applicationContext)
 
+    fun anyTagsPresent() : Boolean {
+        return tags.any()
+    }
 
     fun enableReceiver() {
         _uiState.update { currentState ->

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -77,6 +78,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.nfcwallet.ui.CommunicationScreen
 import com.example.nfcwallet.ui.HomeScreen
+import com.example.nfcwallet.ui.OnBoardingScreen
 import com.example.nfcwallet.ui.WalletViewModel
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
@@ -89,8 +91,9 @@ enum class WalletScreen {
 @Composable
 fun NfcWalletAppBar(
     canNavigateBack: Boolean,
+    showAppTitle: Boolean,
+    showTagActions: Boolean,
     modifier: Modifier = Modifier,
-    showTagActions: Boolean = true,
     onEditAction: () -> Unit,
     onDeleteAction: () -> Unit,
     navigateUp: () -> Unit
@@ -99,7 +102,7 @@ fun NfcWalletAppBar(
 
     TopAppBar(
         title = {
-            if (!canNavigateBack) {
+            if (showAppTitle && !canNavigateBack) {
                 Text(stringResource(id = R.string.app_name))
             }
         },
@@ -396,22 +399,21 @@ fun Menu(
             NfcWalletAppBar(
                 canNavigateBack = navController.previousBackStackEntry != null,
                 showTagActions = uiState.projectionMode,
+                showAppTitle = viewModel.anyTagsPresent(),
                 onEditAction = { editDialogShown = true },
                 onDeleteAction = { deleteDialogShown = true },
                 navigateUp = { navController.navigateUp() })
         },
         floatingActionButton = {
-            Column {
-                if (currentScreen == WalletScreen.Home) {
-                    NewTagFAB(
-                        onClick = {
-                            viewModel.enableReceiver()
-                            viewModel.addTag(Tag("New Tag", null))
-                            navController.navigate(WalletScreen.CommunicationScreen.name)
-                        },
-                        expanded = lazyListState.isScrollingUp()
-                    )
-                }
+            if (currentScreen == WalletScreen.Home && viewModel.anyTagsPresent()) {
+                NewTagFAB(
+                    onClick = {
+                        viewModel.enableReceiver()
+                        viewModel.addTag(Tag("New Tag", null)) //TODO remove
+                        navController.navigate(WalletScreen.CommunicationScreen.name)
+                    },
+                    expanded = lazyListState.isScrollingUp()
+                )
             }
         }
     ) { innerPadding ->
@@ -428,15 +430,30 @@ fun Menu(
                     slideOutHorizontally(targetOffsetX = { -it / 4 })
                 }
             ) {
-                HomeScreen(
-                    listData = viewModel.tags,
-                    systemPadding = innerPadding,
-                    onTagClicked = {
-                        viewModel.setTag(it)
-                        navController.navigate(WalletScreen.CommunicationScreen.name)
-                    },
-                    lazyListState = lazyListState
-                )
+                if (viewModel.anyTagsPresent()) {
+                    HomeScreen(
+                        listData = viewModel.tags,
+                        systemPadding = innerPadding,
+                        onTagClicked = {
+                            viewModel.setTag(it)
+                            navController.navigate(WalletScreen.CommunicationScreen.name)
+                        },
+                        lazyListState = lazyListState
+                    )
+                } else {
+                    OnBoardingScreen(
+                        appName = stringResource(id = R.string.app_name),
+                        onContinue = {
+                            viewModel.enableReceiver()
+                            viewModel.addTag(Tag("New Tag", null)) //TODO remove
+                            navController.navigate(WalletScreen.CommunicationScreen.name)
+                        },
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .padding()
+                            .fillMaxSize()
+                    )
+                }
             }
             composable(
                 route = WalletScreen.CommunicationScreen.name,
@@ -468,6 +485,8 @@ fun HomeAppBarPreview() {
     NFCWalletTheme {
         NfcWalletAppBar(
             canNavigateBack = false,
+            showAppTitle = true,
+            showTagActions = false,
             navigateUp = {},
             onDeleteAction = {},
             onEditAction = {}
@@ -481,6 +500,7 @@ fun ProjectionScreenAppBarPreview() {
         NfcWalletAppBar(
             canNavigateBack = true,
             showTagActions = true,
+            showAppTitle = false,
             navigateUp = {},
             onDeleteAction = {},
             onEditAction = {}
@@ -495,6 +515,7 @@ fun ReceptionScreenAppBarPreview() {
         NfcWalletAppBar(
             canNavigateBack = true,
             showTagActions = false,
+            showAppTitle = false,
             navigateUp = {},
             onDeleteAction = {},
             onEditAction = {}
