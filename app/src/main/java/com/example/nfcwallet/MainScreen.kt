@@ -341,6 +341,12 @@ fun Menu(
 
         var newTagName by remember { mutableStateOf(uiState.selectedTag.name) }
         var newTagImage by remember { mutableStateOf(uiState.selectedTag.image) }
+
+        /*
+        Thank you to 'Ika' on Stack Overflow.
+        The following is based on their answer at https://stackoverflow.com/a/58008340
+        ********************************************************************************************
+         */
         @Suppress("DEPRECATION") val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
         ) { uri: Uri? ->
@@ -352,6 +358,7 @@ fun Menu(
                     MediaStore.Images.Media.getBitmap(contentResolver, uri).asImageBitmap()
             }
         }
+        /* ************************************************************************************** */
 
         TagOptionsDialog(
             image = newTagImage,
@@ -359,7 +366,7 @@ fun Menu(
             onCancel = { editDialogShown = false },
             onNameEdit = { newTagName = it },
             onImageAdd = {
-                launcher.launch("image/*")
+                launcher.launch("image/*") // Restricts user to only their images.
             },
             onImageRemove = { newTagImage = null },
             onConfirm = {
