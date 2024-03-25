@@ -213,7 +213,7 @@ fun ProjectionWithImagePreviewNight() {
 @Composable
 fun ReceptionPreview() {
     NFCWalletTheme {
-        CommunicationScreen(projectionMode = true)
+        CommunicationScreen(projectionMode = false)
     }
 }
 
@@ -221,6 +221,6 @@ fun ReceptionPreview() {
 @Composable
 fun ReceptionPreviewNight() {
     NFCWalletTheme {
-        CommunicationScreen(projectionMode = true)
+        CommunicationScreen(projectionMode = false)
     }
 }
