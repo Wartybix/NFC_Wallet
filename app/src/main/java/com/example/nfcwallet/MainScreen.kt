@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import android.provider.MediaStore
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -68,7 +67,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -343,12 +341,11 @@ fun Menu(
 
         var newTagName by remember { mutableStateOf(uiState.selectedTag.name) }
         var newTagImage by remember { mutableStateOf(uiState.selectedTag.image) }
-        var newTagImageUri by remember { mutableStateOf<Uri?>(null) }
-        val launcher = rememberLauncherForActivityResult(
+        @Suppress("DEPRECATION") val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
         ) { uri: Uri? ->
             if (uri != null) {
-                newTagImage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                newTagImage = if (Build.VERSION.SDK_INT >= VERSION_CODES.P)
                     ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
                         .asImageBitmap()
                 else
