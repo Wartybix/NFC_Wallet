@@ -11,10 +11,10 @@ class Tag(
     private var image: ByteArray? = null
 
     fun getImage() : Bitmap? {
-        if (image == null) {
-            return null
+        return if (image == null) {
+            null
         } else {
-            return BitmapFactory.decodeByteArray(image, 0, image!!.size)
+            BitmapFactory.decodeByteArray(image, 0, image!!.size)
             //TODO do something about this non-null asserted call
         }
     }
