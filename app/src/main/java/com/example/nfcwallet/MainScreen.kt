@@ -27,7 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.AddAPhoto
+import androidx.compose.material.icons.outlined.AddPhotoAlternate
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.HideImage
 import androidx.compose.material3.AlertDialog
@@ -267,7 +267,7 @@ fun TagOptionsDialog(
                         val caption: String
 
                         if (image == null) {
-                            icon = Icons.Outlined.AddAPhoto
+                            icon = Icons.Outlined.AddPhotoAlternate
                             caption = stringResource(R.string.add_photo)
                         } else {
                             icon = Icons.Outlined.Edit
