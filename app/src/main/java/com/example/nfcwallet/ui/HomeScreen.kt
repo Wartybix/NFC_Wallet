@@ -59,11 +59,7 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize()
     ) {
         items(listData) { item ->
-            val icon: ImageBitmap? = if (item.getImage() == null) {
-                null
-            } else {
-                item.getImage()
-            }
+            val icon: ImageBitmap? = item.image
             TagCard(
                 name = item.name,
                 icon = icon,

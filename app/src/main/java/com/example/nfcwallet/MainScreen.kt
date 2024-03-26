@@ -348,7 +348,7 @@ fun Menu(
             mutableStateOf(if (uiState.projectionMode) uiState.selectedTag.name else "")
         }
         var newTagImage by remember {
-            mutableStateOf(if (uiState.projectionMode) uiState.selectedTag.getImage() else null)
+            mutableStateOf(if (uiState.projectionMode) uiState.selectedTag.image else null)
         }
 
         /*
@@ -382,10 +382,9 @@ fun Menu(
             onConfirm = {
                 if (uiState.projectionMode) {
                     uiState.selectedTag.name = newTagName
-                    uiState.selectedTag.setImage(newTagImage)
+                    uiState.selectedTag.image = newTagImage
                 } else {
-                    val newTag = Tag(newTagName)
-                    newTag.setImage(newTagImage)
+                    val newTag = Tag(newTagName, newTagImage)
                     viewModel.addTag(newTag)
 
                     navController.navigateUp()
@@ -484,7 +483,7 @@ fun Menu(
                 CommunicationScreen(
                     projectionMode = uiState.projectionMode,
                     tagName = uiState.selectedTag.name,
-                    tagImage = uiState.selectedTag.getImage(),
+                    tagImage = uiState.selectedTag.image,
                     modifier = Modifier.padding(innerPadding),
                     onTagScan = { editDialogShown = true }
                 )

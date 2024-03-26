@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.AndroidViewModel
+import com.example.nfcwallet.SerializableTag
 import com.example.nfcwallet.Tag
 import com.example.nfcwallet.data.WalletUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,23 +25,24 @@ private fun loadTagsFromStorage(context: Context) : SnapshotStateList<Tag> {
         val fis = context.openFileInput(USER_STORAGE_FILE_PATH)
         val ois = ObjectInputStream(fis)
 
-        tags = (ois.readObject() as List<Tag>).toMutableStateList()
+        val serializableTags = ois.readObject() as List<SerializableTag>
+        tags = serializableTags.map { serializableTag -> Tag(serializableTag.name, serializableTag.getImage()) }.toMutableStateList()
 
         ois.close()
         fis.close()
-    } catch (e: Exception) { // This is normal, e.g. if the user has opened the app for the 1st time
+    } catch (e: Exception) { // This is normal, e.g. if the user has opened the app for the first time
         e.printStackTrace()
         tags = SnapshotStateList()
     }
-    Log.d("Loading tags", "Loading tags right now")
 
     return tags
 }
 
 private fun saveTagsToStorage(context: Context, tags: SnapshotStateList<Tag>) {
-    Log.d("Saving tag", tags.toString())
 
-    val serializableTags = tags.toList<Tag>()
+    val serializableTags: List<SerializableTag> = tags.map {
+        tag -> SerializableTag(tag.name, tag.image)
+    }
 
     try {
         val fos: FileOutputStream = context.openFileOutput(USER_STORAGE_FILE_PATH, Context.MODE_PRIVATE)
@@ -50,8 +52,6 @@ private fun saveTagsToStorage(context: Context, tags: SnapshotStateList<Tag>) {
 
         oos.close()
         fos.close()
-
-        Log.d("Tag saved", "successful")
     } catch (e: Exception) {
         e.printStackTrace()
     }
