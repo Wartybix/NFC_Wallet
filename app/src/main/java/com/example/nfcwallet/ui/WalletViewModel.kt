@@ -2,7 +2,6 @@ package com.example.nfcwallet.ui
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.AndroidViewModel
