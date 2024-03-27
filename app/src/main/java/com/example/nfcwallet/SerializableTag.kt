@@ -2,6 +2,7 @@ package com.example.nfcwallet
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -16,7 +17,13 @@ class SerializableTag(val name: String, image: ImageBitmap?) : Serializable {
             null
         } else {
             val byteStream = ByteArrayOutputStream()
-            image.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 0, byteStream)
+
+            val compressFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+                Bitmap.CompressFormat.WEBP_LOSSY
+            else
+                Bitmap.CompressFormat.JPEG
+
+            image.asAndroidBitmap().compress(compressFormat, 0, byteStream)
             byteStream.toByteArray()
         }
     }
