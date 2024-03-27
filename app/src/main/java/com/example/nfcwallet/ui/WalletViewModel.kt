@@ -5,13 +5,17 @@ import android.content.Context
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.nfcwallet.SerializableTag
 import com.example.nfcwallet.Tag
 import com.example.nfcwallet.data.WalletUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.FileOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -37,22 +41,23 @@ private fun loadTagsFromStorage(context: Context) : SnapshotStateList<Tag> {
     return tags
 }
 
-private fun saveTagsToStorage(context: Context, tags: SnapshotStateList<Tag>) {
+private suspend fun saveTagsToStorage(context: Context, tags: SnapshotStateList<Tag>) {
+    withContext(Dispatchers.IO) {
+        val serializableTags: List<SerializableTag> = tags.map {
+                tag -> SerializableTag(tag.name, tag.image)
+        }
 
-    val serializableTags: List<SerializableTag> = tags.map {
-        tag -> SerializableTag(tag.name, tag.image)
-    }
+        try {
+            val fos: FileOutputStream = context.openFileOutput(USER_STORAGE_FILE_PATH, Context.MODE_PRIVATE)
+            val oos = ObjectOutputStream(fos)
 
-    try {
-        val fos: FileOutputStream = context.openFileOutput(USER_STORAGE_FILE_PATH, Context.MODE_PRIVATE)
-        val oos = ObjectOutputStream(fos)
+            oos.writeObject(serializableTags)
 
-        oos.writeObject(serializableTags)
-
-        oos.close()
-        fos.close()
-    } catch (e: Exception) {
-        e.printStackTrace()
+            oos.close()
+            fos.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
 
@@ -83,17 +88,20 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun saveTags() {
-        saveTagsToStorage(getApplication<Application>().applicationContext, tags)
+    fun saveTags(onSave: () -> Unit = {}) {
+        viewModelScope.launch {
+            saveTagsToStorage(getApplication<Application>().applicationContext, tags)
+            onSave()
+        }
     }
 
-    fun addTag(tag: Tag) {
+    fun addTag(tag: Tag, onSave: () -> Unit = {}) {
         tags.add(tag)
-        saveTags()
+        saveTags(onSave = onSave)
     }
 
-    fun removeTag(tag: Tag) {
+    fun removeTag(tag: Tag, onSave: () -> Unit = {}) {
         tags.remove(tag)
-        saveTags()
+        saveTags(onSave = onSave)
     }
 }

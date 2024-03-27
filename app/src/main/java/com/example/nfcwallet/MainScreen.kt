@@ -32,6 +32,7 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.HideImage
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
@@ -191,7 +192,8 @@ fun NewTagFAB(
 fun DeleteDialog(
     onCancel: () -> Unit,
     onConfirm: () -> Unit,
-    tagName: String
+    tagName: String,
+    saving: Boolean = false
 ) {
     AlertDialog(
         text = {
@@ -202,7 +204,13 @@ fun DeleteDialog(
             FilledTonalButton(
                 onClick = onConfirm
             ) {
-                Text(stringResource(R.string.delete))
+                if (saving) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    )
+                } else {
+                    Text(stringResource(R.string.delete))
+                }
             }
         },
         dismissButton = {
@@ -219,12 +227,14 @@ fun DeleteDialog(
 fun TagOptionsDialog(
     image: ImageBitmap? = null,
     tagName: String = "",
+    saving: Boolean = false,
     onNameEdit: (String) -> Unit,
     onImageAdd: () -> Unit,
     onImageRemove: () -> Unit,
     onCancel: () -> Unit,
     onConfirm: () -> Unit
-) {
+) { //TODO Fix indentation
+
      Dialog(onDismissRequest = onCancel) {
         ElevatedCard(
             modifier = Modifier.fillMaxWidth(),
@@ -316,8 +326,17 @@ fun TagOptionsDialog(
                     TextButton(onClick = onCancel) {
                         Text(stringResource(id = R.string.cancel))
                     }
-                    FilledTonalButton(onClick = onConfirm, Modifier.padding(start = 8.dp)) {
-                        Text(stringResource(R.string.save))
+                    FilledTonalButton(
+                        onClick = onConfirm,
+                        Modifier.padding(start = 8.dp)
+                    ) {
+                        if (saving) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+                        } else {
+                            Text(stringResource(R.string.save))
+                        }
                     }
                 }
             }
@@ -349,6 +368,8 @@ fun Menu(
             mutableStateOf(if (uiState.projectionMode) uiState.selectedTag.image else null)
         }
 
+        var isSaving by remember { mutableStateOf(false) }
+
         /*
         Thank you to 'Ika' on Stack Overflow.
         The following is based on their answer at https://stackoverflow.com/a/58008340
@@ -371,6 +392,7 @@ fun Menu(
         TagOptionsDialog(
             image = newTagImage,
             tagName = newTagName,
+            saving = isSaving,
             onCancel = { editDialogShown = false },
             onNameEdit = { newTagName = it },
             onImageAdd = {
@@ -378,31 +400,45 @@ fun Menu(
             },
             onImageRemove = { newTagImage = null },
             onConfirm = {
+                isSaving = true
+
                 if (uiState.projectionMode) {
                     uiState.selectedTag.name = newTagName
                     uiState.selectedTag.image = newTagImage
+
+                    viewModel.saveTags(onSave = { editDialogShown = false })
                 } else {
                     val newTag = Tag(newTagName, newTagImage)
-                    viewModel.addTag(newTag)
-
-                    navController.navigateUp()
+                    viewModel.addTag(
+                        tag = newTag,
+                        onSave = {
+                            editDialogShown = false
+                            navController.navigateUp()
+                        }
+                    )
                 }
-
-                viewModel.saveTags()
-                editDialogShown = false
             }
         )
     }
 
     if (deleteDialogShown) {
+        var isSaving by remember { mutableStateOf(false) }
+        
         DeleteDialog(
             onCancel = { deleteDialogShown = false },
             onConfirm = {
-                deleteDialogShown = false
-                viewModel.removeTag(uiState.selectedTag)
-                navController.navigateUp()
+                isSaving = true
+
+                viewModel.removeTag(
+                    tag = uiState.selectedTag,
+                    onSave = {
+                        deleteDialogShown = false
+                        navController.navigateUp()
+                    }
+                )
             },
-            tagName = uiState.selectedTag.name
+            tagName = uiState.selectedTag.name,
+            saving = isSaving
         )
     }
 
@@ -596,7 +632,7 @@ fun EditDialogPreview() {
 
 @Preview
 @Composable
-fun EditDialogPreviewWithTag() {
+fun EditDialogPreviewWithTagSaving() {
     NFCWalletTheme {
         TagOptionsDialog(
             onCancel = {},
@@ -612,7 +648,7 @@ fun EditDialogPreviewWithTag() {
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun EditDialogPreviewWithTagNight() {
+fun EditDialogPreviewWithTagSavingNight() {
     NFCWalletTheme {
         TagOptionsDialog(
             onCancel = {},
