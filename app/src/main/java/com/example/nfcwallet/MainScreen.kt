@@ -233,9 +233,8 @@ fun TagOptionsDialog(
     onImageRemove: () -> Unit,
     onCancel: () -> Unit,
     onConfirm: () -> Unit
-) { //TODO Fix indentation
-
-     Dialog(onDismissRequest = onCancel) {
+) {
+    Dialog(onDismissRequest = onCancel) {
         ElevatedCard(
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.extraLarge
