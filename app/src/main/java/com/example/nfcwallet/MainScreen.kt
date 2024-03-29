@@ -639,6 +639,7 @@ fun EditDialogPreviewWithTagSaving() {
             onNameEdit = {},
             image = ImageBitmap.imageResource(R.drawable.pigeon),
             tagName = "Example tag",
+            saving = true,
             onImageAdd = {},
             onImageRemove = {}
         )
@@ -655,6 +656,7 @@ fun EditDialogPreviewWithTagSavingNight() {
             onNameEdit = {},
             image = ImageBitmap.imageResource(R.drawable.pigeon),
             tagName = "Example tag",
+            saving = true,
             onImageAdd = {},
             onImageRemove = {}
         )
