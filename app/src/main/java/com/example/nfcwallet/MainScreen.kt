@@ -8,7 +8,10 @@ import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,7 +39,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -62,6 +64,8 @@ enum class WalletScreen {
     CommunicationScreen,
     ImageViewer
 }
+
+const val IMAGE_VIEWER_TRANSITION_SCALE = 0.9f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -291,7 +295,7 @@ fun Menu(
         ) {
             composable(
                 route = WalletScreen.Home.name,
-                enterTransition = {
+                popEnterTransition = {
                     slideInHorizontally( initialOffsetX = { -it / 4 } )
                 },
                 exitTransition = {
@@ -324,12 +328,15 @@ fun Menu(
             }
             composable(
                 route = WalletScreen.CommunicationScreen.name,
+                popEnterTransition = {
+                    fadeIn()
+                },
                 enterTransition = {
                     slideIntoContainer(
                         towards = AnimatedContentTransitionScope.SlideDirection.Start
                     )
                 },
-                exitTransition = {
+                popExitTransition = {
                     slideOutOfContainer(
                         towards = AnimatedContentTransitionScope.SlideDirection.End
                     )
@@ -349,9 +356,10 @@ fun Menu(
             composable(
                 route = WalletScreen.ImageViewer.name,
                 enterTransition = {
-                    expandVertically(
-                        expandFrom = Alignment.CenterVertically
-                    )
+                    scaleIn(initialScale = IMAGE_VIEWER_TRANSITION_SCALE) + fadeIn()
+                },
+                popExitTransition = {
+                    scaleOut(targetScale = IMAGE_VIEWER_TRANSITION_SCALE) + fadeOut()
                 }
             ) {
                 uiState.selectedTag.image?.let { it1 -> ImageViewer(image = it1) }
