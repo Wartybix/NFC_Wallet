@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,6 +36,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -49,6 +51,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.nfcwallet.ui.CommunicationScreen
 import com.example.nfcwallet.ui.DeleteDialog
 import com.example.nfcwallet.ui.HomeScreen
+import com.example.nfcwallet.ui.ImageViewer
 import com.example.nfcwallet.ui.OnBoardingScreen
 import com.example.nfcwallet.ui.TagOptionsDialog
 import com.example.nfcwallet.ui.WalletViewModel
@@ -56,7 +59,8 @@ import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 enum class WalletScreen {
     Home,
-    CommunicationScreen
+    CommunicationScreen,
+    ImageViewer
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -336,8 +340,21 @@ fun Menu(
                     tagName = uiState.selectedTag.name,
                     tagImage = uiState.selectedTag.image,
                     modifier = Modifier.padding(innerPadding),
-                    onTagScan = { editDialogShown = true }
+                    onTagScan = { editDialogShown = true },
+                    onExpandButtonClicked = {
+                        navController.navigate(WalletScreen.ImageViewer.name)
+                    }
                 )
+            }
+            composable(
+                route = WalletScreen.ImageViewer.name,
+                enterTransition = {
+                    expandVertically(
+                        expandFrom = Alignment.CenterVertically
+                    )
+                }
+            ) {
+                uiState.selectedTag.image?.let { it1 -> ImageViewer(image = it1) }
             }
         }
     }
