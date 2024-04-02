@@ -314,7 +314,6 @@ fun Menu(
                     )
                 } else {
                     OnBoardingScreen(
-                        appName = stringResource(id = R.string.app_name),
                         onContinue = {
                             viewModel.enableReceiver()
                             navController.navigate(WalletScreen.CommunicationScreen.name)

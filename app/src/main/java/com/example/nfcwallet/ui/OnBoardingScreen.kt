@@ -18,14 +18,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.nfcwallet.R
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 @Composable
 fun OnBoardingScreen(
-    appName: String,
     onContinue: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -48,7 +49,7 @@ fun OnBoardingScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Welcome to " + appName,
+                text = "Welcome to ${stringResource(R.string.app_name)}",
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
             )
@@ -84,7 +85,7 @@ fun OnBoardingScreen(
 @Composable
 fun OnBoardingScreenPreview() {
     NFCWalletTheme {
-        OnBoardingScreen(appName = "NFC Wallet", onContinue = {})
+        OnBoardingScreen(onContinue = {})
     }
 }
 
@@ -92,6 +93,6 @@ fun OnBoardingScreenPreview() {
 @Composable
 fun OnBoardingScreenPreviewDark() {
     NFCWalletTheme {
-        OnBoardingScreen(appName = "NFC Wallet", onContinue = {})
+        OnBoardingScreen(onContinue = {})
     }
 }
