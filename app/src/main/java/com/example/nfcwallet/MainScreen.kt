@@ -268,25 +268,26 @@ fun Menu(
 
     val nfcManager = LocalContext.current.getSystemService(Context.NFC_SERVICE) as NfcManager
     val nfcAdapter = nfcManager.defaultAdapter
-    val nfcStatus = if (nfcAdapter == null)
+    val nfcStatus = if (nfcAdapter == null) // Is NFC *unsupported* by the device?
         NfcStatus.Unsupported
-    else if (nfcAdapter.isEnabled)
+    else if (nfcAdapter.isEnabled) // Is NFC *enabled* on the device?
         NfcStatus.Enabled
-    else
-        NfcStatus.Enabled
+    else // NFC must be disabled on the device
+        NfcStatus.Disabled
 
     Scaffold(
         topBar = {
             NfcWalletAppBar(
                 canNavigateBack = navController.previousBackStackEntry != null,
                 showTagActions = uiState.projectionMode,
-                showAppTitle = viewModel.anyTagsPresent(),
+                showAppTitle = viewModel.anyTagsPresent() && nfcStatus == NfcStatus.Enabled,
                 onEditAction = { editDialogShown = true },
                 onDeleteAction = { deleteDialogShown = true },
                 navigateUp = { navController.navigateUp() })
         },
         floatingActionButton = {
-            if (currentScreen == WalletScreen.Home && viewModel.anyTagsPresent()) {
+            if (currentScreen == WalletScreen.Home && viewModel.anyTagsPresent()
+                && nfcStatus == NfcStatus.Enabled) {
                 NewTagFAB(
                     onClick = {
                         viewModel.enableReceiver()
