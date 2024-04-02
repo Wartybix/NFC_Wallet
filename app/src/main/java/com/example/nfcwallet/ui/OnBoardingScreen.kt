@@ -1,6 +1,5 @@
 package com.example.nfcwallet.ui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Nfc
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -22,11 +22,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.nfcwallet.NfcStatus
 import com.example.nfcwallet.R
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 @Composable
 fun OnBoardingScreen(
+    nfcStatus: NfcStatus,
     onContinue: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -35,9 +37,11 @@ fun OnBoardingScreen(
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column() {
+        val icon = if (nfcStatus == NfcStatus.Enabled) Icons.Default.Nfc else Icons.Default.ErrorOutline
+
+        Column {
             Icon(
-                imageVector = Icons.Default.Nfc,
+                imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier
                     .padding(vertical = 32.dp)
@@ -48,8 +52,25 @@ fun OnBoardingScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            val headingText = if (nfcStatus == NfcStatus.Enabled) {
+                stringResource(R.string.welcome_to, stringResource(R.string.app_name))
+            } else if (nfcStatus == NfcStatus.Disabled) {
+                stringResource(R.string.nfc_is_disabled)
+            } else {
+                stringResource(R.string.device_unsupported)
+            }
+
+            val bodyText = if (nfcStatus == NfcStatus.Enabled) {
+                stringResource(R.string.nfc_tags_will_show_here)
+            } else if (nfcStatus == NfcStatus.Disabled) {
+                stringResource(R.string.please_enable_nfc)
+            } else {
+                stringResource(R.string.nfc_unsupported)
+            }
+
+
             Text(
-                text = "Welcome to ${stringResource(R.string.app_name)}",
+                text = headingText,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
             )
@@ -57,23 +78,25 @@ fun OnBoardingScreen(
             Spacer(modifier = Modifier.size(16.dp))
 
             Text(
-                text = "Once you add some NFC tags, they will show here.",
+                text = bodyText,
                 textAlign = TextAlign.Center
             )
 
-            Button(
-                onClick = onContinue,
-                modifier = Modifier
-                    .padding(top = 32.dp)
-                    .fillMaxWidth(),
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null,
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Add your first tag")
+            if (nfcStatus == NfcStatus.Enabled) {
+                Button(
+                    onClick = onContinue,
+                    modifier = Modifier
+                        .padding(top = 32.dp)
+                        .fillMaxWidth(),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    )
+                    Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(stringResource(R.string.add_your_first_tag))
+                }
             }
         }
 
@@ -85,14 +108,22 @@ fun OnBoardingScreen(
 @Composable
 fun OnBoardingScreenPreview() {
     NFCWalletTheme {
-        OnBoardingScreen(onContinue = {})
+        OnBoardingScreen(onContinue = {}, nfcStatus = NfcStatus.Enabled)
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview
 @Composable
-fun OnBoardingScreenPreviewDark() {
+fun OnBoardingNfcDisabledPreview() {
     NFCWalletTheme {
-        OnBoardingScreen(onContinue = {})
+        OnBoardingScreen(nfcStatus = NfcStatus.Disabled, onContinue = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun OnBoardingScreenNfcUnsupportedPreview() {
+    NFCWalletTheme {
+        OnBoardingScreen(onContinue = {}, nfcStatus = NfcStatus.Unsupported)
     }
 }

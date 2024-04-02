@@ -17,4 +17,11 @@
     <string name="save">Save</string>
     <string name="add_photo">Add Photo</string>
     <string name="edit_photo">Edit Photo</string>
+    <string name="welcome_to">Welcome to %1$s</string>
+    <string name="nfc_tags_will_show_here">Once you add some NFC tags, they will show here.</string>
+    <string name="nfc_is_disabled">NFC is disabled</string>
+    <string name="add_your_first_tag">Add your first tag</string>
+    <string name="device_unsupported">Device unsupported</string>
+    <string name="nfc_unsupported">Unfortunately, this device does not support NFC. Please use this app on a device with this feature.</string>
+    <string name="please_enable_nfc">Please enable NFC in the system settings.</string>
 </resources>

@@ -1,7 +1,9 @@
 package com.example.nfcwallet
 
+import android.content.Context
 import android.graphics.ImageDecoder
 import android.net.Uri
+import android.nfc.NfcManager
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import android.provider.MediaStore
@@ -59,10 +61,18 @@ import com.example.nfcwallet.ui.TagOptionsDialog
 import com.example.nfcwallet.ui.WalletViewModel
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
+
+//TODO move these to separate classes.
 enum class WalletScreen {
     Home,
     CommunicationScreen,
     ImageViewer
+}
+
+enum class NfcStatus {
+    Enabled, //For when NFC is enabled in the system settings
+    Disabled, //For when NFC is supported by the device, but disabled in the settings
+    Unsupported //For when NFC is unsupported by the device.
 }
 
 const val IMAGE_VIEWER_TRANSITION_SCALE = 0.9f
@@ -267,6 +277,15 @@ fun Menu(
         )
     }
 
+    val nfcManager = LocalContext.current.getSystemService(Context.NFC_SERVICE) as NfcManager
+    val nfcAdapter = nfcManager.defaultAdapter
+    val nfcStatus = if (nfcAdapter == null)
+        NfcStatus.Unsupported
+    else if (nfcAdapter.isEnabled)
+        NfcStatus.Enabled
+    else
+        NfcStatus.Enabled
+
     Scaffold(
         topBar = {
             NfcWalletAppBar(
@@ -302,7 +321,7 @@ fun Menu(
                     slideOutHorizontally(targetOffsetX = { -it / 4 })
                 }
             ) {
-                if (viewModel.anyTagsPresent()) {
+                if (viewModel.anyTagsPresent() && nfcStatus == NfcStatus.Enabled) {
                     HomeScreen(
                         listData = viewModel.tags,
                         systemPadding = innerPadding,
@@ -314,6 +333,7 @@ fun Menu(
                     )
                 } else {
                     OnBoardingScreen(
+                        nfcStatus = nfcStatus,
                         onContinue = {
                             viewModel.enableReceiver()
                             navController.navigate(WalletScreen.CommunicationScreen.name)
