@@ -52,6 +52,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.nfcwallet.data.NfcStatus
+import com.example.nfcwallet.data.WalletScreen
 import com.example.nfcwallet.ui.CommunicationScreen
 import com.example.nfcwallet.ui.DeleteDialog
 import com.example.nfcwallet.ui.HomeScreen
@@ -61,19 +63,6 @@ import com.example.nfcwallet.ui.TagOptionsDialog
 import com.example.nfcwallet.ui.WalletViewModel
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
-
-//TODO move these to separate classes.
-enum class WalletScreen {
-    Home,
-    CommunicationScreen,
-    ImageViewer
-}
-
-enum class NfcStatus {
-    Enabled, //For when NFC is enabled in the system settings
-    Disabled, //For when NFC is supported by the device, but disabled in the settings
-    Unsupported //For when NFC is unsupported by the device.
-}
 
 const val IMAGE_VIEWER_TRANSITION_SCALE = 0.9f
 
