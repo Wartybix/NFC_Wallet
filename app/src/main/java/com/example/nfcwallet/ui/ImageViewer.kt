@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,7 +18,9 @@ fun ImageViewer(
     image: ImageBitmap,
     modifier: Modifier = Modifier
 ) {
-    val zoomState = rememberZoomState()
+    val zoomState = rememberZoomState(
+        contentSize = Size(width = image.width.toFloat(), height = image.height.toFloat())
+    )
 
     Image(
         bitmap = image,
