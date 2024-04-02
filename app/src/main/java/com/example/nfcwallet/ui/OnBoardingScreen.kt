@@ -52,20 +52,28 @@ fun OnBoardingScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val headingText = if (nfcStatus == NfcStatus.Enabled) {
-                stringResource(R.string.welcome_to, stringResource(R.string.app_name))
-            } else if (nfcStatus == NfcStatus.Disabled) {
-                stringResource(R.string.nfc_is_disabled)
-            } else {
-                stringResource(R.string.device_unsupported)
+            val headingText = when (nfcStatus) {
+                NfcStatus.Enabled -> {
+                    stringResource(R.string.welcome_to, stringResource(R.string.app_name))
+                }
+                NfcStatus.Disabled -> {
+                    stringResource(R.string.nfc_is_disabled)
+                }
+                else -> {
+                    stringResource(R.string.device_unsupported)
+                }
             }
 
-            val bodyText = if (nfcStatus == NfcStatus.Enabled) {
-                stringResource(R.string.nfc_tags_will_show_here)
-            } else if (nfcStatus == NfcStatus.Disabled) {
-                stringResource(R.string.please_enable_nfc)
-            } else {
-                stringResource(R.string.nfc_unsupported)
+            val bodyText = when (nfcStatus) {
+                NfcStatus.Enabled -> {
+                    stringResource(R.string.nfc_tags_will_show_here)
+                }
+                NfcStatus.Disabled -> {
+                    stringResource(R.string.please_enable_nfc)
+                }
+                else -> {
+                    stringResource(R.string.nfc_unsupported)
+                }
             }
 
 
