@@ -3,6 +3,7 @@ package com.example.nfcwallet
 import android.content.Context
 import android.graphics.ImageDecoder
 import android.net.Uri
+import android.nfc.NfcAdapter
 import android.nfc.NfcManager
 import android.os.Build
 import android.os.Build.VERSION_CODES
@@ -283,6 +284,7 @@ fun Menu(
     var nfcStatus by remember { mutableStateOf(getNfcStatus()) }
 
     NfcBroadcastReceiver(
+        systemAction = NfcAdapter.ACTION_ADAPTER_STATE_CHANGED,
         onReceive = { // When the status of the NFC setting has changed
             nfcStatus = getNfcStatus() // Fetch the NFC state again.
         }

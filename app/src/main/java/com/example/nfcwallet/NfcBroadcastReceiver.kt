@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.nfc.NfcAdapter
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -17,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
  */
 @Composable
 fun NfcBroadcastReceiver(
+    systemAction: String,
     onReceive: (intent: Intent?) -> Unit
 ) {
     val context = LocalContext.current
@@ -24,7 +24,7 @@ fun NfcBroadcastReceiver(
     val currentOnReceive by rememberUpdatedState(newValue = onReceive)
     
     DisposableEffect(context) {
-        val intentFilter = IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED)
+        val intentFilter = IntentFilter(systemAction)
         val broadcast = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 currentOnReceive(intent)
