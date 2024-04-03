@@ -7,6 +7,7 @@ import android.nfc.NfcManager
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -266,14 +267,34 @@ fun Menu(
         )
     }
 
-    val nfcManager = LocalContext.current.getSystemService(Context.NFC_SERVICE) as NfcManager
-    val nfcAdapter = nfcManager.defaultAdapter
-    val nfcStatus = if (nfcAdapter == null) // Is NFC *unsupported* by the device?
-        NfcStatus.Unsupported
-    else if (nfcAdapter.isEnabled) // Is NFC *enabled* on the device?
-        NfcStatus.Enabled
-    else // NFC must be disabled on the device
-        NfcStatus.Disabled
+    val context = LocalContext.current
+    var nfcManager by remember { mutableStateOf(context.getSystemService(Context.NFC_SERVICE) as NfcManager) }
+    var nfcAdapter by remember { mutableStateOf(nfcManager.defaultAdapter) }
+    var nfcStatus by remember {
+        mutableStateOf(
+            if (nfcAdapter == null) // Is NFC *unsupported* by the device?
+                NfcStatus.Unsupported
+            else if (nfcAdapter.isEnabled) // Is NFC *enabled* on the device?
+                NfcStatus.Enabled
+            else // NFC must be disabled on the device
+                NfcStatus.Disabled
+        )
+    }
+
+    NfcBroadcastReceiver(
+        onReceive = { it ->
+            Log.d("NFC Status", "Status changed")
+            nfcManager = context.getSystemService(Context.NFC_SERVICE) as NfcManager
+            nfcAdapter = nfcManager.defaultAdapter
+
+            nfcStatus = if (nfcAdapter == null) // Is NFC *unsupported* by the device?
+                NfcStatus.Unsupported
+            else if (nfcAdapter.isEnabled) // Is NFC *enabled* on the device?
+                NfcStatus.Enabled
+            else // NFC must be disabled on the device
+                NfcStatus.Disabled
+        }
+    )
 
     Scaffold(
         topBar = {
