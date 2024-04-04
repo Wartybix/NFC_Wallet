@@ -33,7 +33,7 @@ import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
 
 @Composable
-fun HomeScreen(
+fun TagList(
     listData: SnapshotStateList<Tag>,
     systemPadding: PaddingValues,
     onTagClicked: (Tag) -> Unit,

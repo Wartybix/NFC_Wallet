@@ -57,9 +57,9 @@ import com.example.nfcwallet.data.NfcStatus
 import com.example.nfcwallet.data.WalletScreen
 import com.example.nfcwallet.ui.CommunicationScreen
 import com.example.nfcwallet.ui.DeleteDialog
-import com.example.nfcwallet.ui.HomeScreen
 import com.example.nfcwallet.ui.ImageViewer
 import com.example.nfcwallet.ui.OnBoardingScreen
+import com.example.nfcwallet.ui.TagList
 import com.example.nfcwallet.ui.TagOptionsDialog
 import com.example.nfcwallet.ui.WalletViewModel
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
@@ -178,7 +178,7 @@ fun Menu(
     val currentScreen = WalletScreen.valueOf(
         backStackEntry?.destination?.route ?: WalletScreen.Home.name
     )
-    val lazyListState = rememberLazyListState() // Saves state of the lazy column in the home page.
+    val lazyListState = rememberLazyListState() // Saves state of the lazy column in the tag list.
     val uiState = viewModel.uiState.collectAsState().value
     var deleteDialogShown by remember { mutableStateOf(false) }
     var editDialogShown by remember { mutableStateOf(false) }
@@ -327,7 +327,7 @@ fun Menu(
                 }
             ) {
                 if (viewModel.anyTagsPresent() && nfcStatus == NfcStatus.Enabled) {
-                    HomeScreen(
+                    TagList(
                         listData = viewModel.tags,
                         systemPadding = innerPadding,
                         onTagClicked = {
