@@ -18,6 +18,9 @@ fun ImageViewer(
     image: ImageBitmap,
     modifier: Modifier = Modifier
 ) {
+    /* Thank you to Atsushi USUI for this feature.
+    https://github.com/usuiat/Zoomable
+     */
     val zoomState = rememberZoomState(
         contentSize = Size(width = image.width.toFloat(), height = image.height.toFloat())
     )

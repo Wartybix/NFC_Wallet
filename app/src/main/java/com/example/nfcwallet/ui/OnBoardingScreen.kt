@@ -30,6 +30,9 @@ import com.example.nfcwallet.R
 import com.example.nfcwallet.data.NfcStatus
 import com.example.nfcwallet.ui.theme.NFCWalletTheme
 
+/**
+ * Used to welcome the user into the app, or warn them that there is an issue with NFC in their device.
+ */
 @Composable
 fun OnBoardingScreen(
     nfcStatus: NfcStatus,
@@ -41,7 +44,11 @@ fun OnBoardingScreen(
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val icon = if (nfcStatus == NfcStatus.Enabled) Icons.Default.Nfc else Icons.Default.ErrorOutline
+        // If there's an error with NFC, the icon displayed will be a warning symbol, rather than the usual app logo
+        val icon = if (nfcStatus == NfcStatus.Enabled)
+            Icons.Default.Nfc
+        else
+            Icons.Default.ErrorOutline
 
         Column {
             Icon(
@@ -54,6 +61,7 @@ fun OnBoardingScreen(
         }
 
         Column(
+            //Used to keep text in the middle horizontally, as the button takes the max width
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val headingText = when (nfcStatus) {
@@ -63,7 +71,7 @@ fun OnBoardingScreen(
                 NfcStatus.Disabled -> {
                     stringResource(R.string.nfc_is_disabled)
                 }
-                else -> {
+                else -> { // I.e. when nfcStatus == NfcStatus.Unsupported
                     stringResource(R.string.device_unsupported)
                 }
             }
@@ -75,7 +83,7 @@ fun OnBoardingScreen(
                 NfcStatus.Disabled -> {
                     stringResource(R.string.please_enable_nfc)
                 }
-                else -> {
+                else -> { // I.e. when nfcStatus == NfcStatus.Unsupported
                     stringResource(R.string.nfc_unsupported)
                 }
             }
@@ -83,7 +91,7 @@ fun OnBoardingScreen(
 
             Text(
                 text = headingText,
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Center, // Ensures new lines aren't justified left of the text bounds
                 style = MaterialTheme.typography.titleLarge,
             )
 
@@ -94,16 +102,18 @@ fun OnBoardingScreen(
                 textAlign = TextAlign.Center
             )
 
+            //Only show the button if NFC is supported by the device
             if (nfcStatus != NfcStatus.Unsupported) {
-                val context = LocalContext.current
+                val context = LocalContext.current //Get current context
 
                 Button(
                     onClick = {
-                              if (nfcStatus == NfcStatus.Enabled) {
-                                  onContinue()
-                              } else {
-                                  context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
-                              }
+                        if (nfcStatus == NfcStatus.Enabled) {
+                            onContinue()
+                        } else {
+                            // Opens the settings app into the NFC page.
+                            context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
+                        }
                     },
                     modifier = Modifier
                         .padding(top = 32.dp)
@@ -132,8 +142,6 @@ fun OnBoardingScreen(
                 }
             }
         }
-
-
     }
 }
 
@@ -149,7 +157,7 @@ fun OnBoardingScreenPreview() {
 @Composable
 fun OnBoardingNfcDisabledPreview() {
     NFCWalletTheme {
-        OnBoardingScreen(nfcStatus = NfcStatus.Disabled, onContinue = {})
+        OnBoardingScreen(onContinue = {}, nfcStatus = NfcStatus.Disabled)
     }
 }
 
