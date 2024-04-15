@@ -143,7 +143,8 @@ fun TagOptionsDialog(
                     }
                     FilledTonalButton(
                         onClick = onConfirm,
-                        Modifier.padding(start = 8.dp)
+                        enabled = tagName != "", // Disable the button when text field is empty.
+                        modifier = Modifier.padding(start = 8.dp)
                     ) {
                         if (saving) {
                             CircularProgressIndicator(
